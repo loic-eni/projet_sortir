@@ -21,6 +21,7 @@ class Authenticator extends AbstractLoginFormAuthenticator
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
+    public const ON_LOGGEDIN_ROUTE = 'app_main';
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
@@ -44,13 +45,8 @@ class Authenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
-        }
-
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        $mainRoute = $this->urlGenerator->generate(self::ON_LOGGEDIN_ROUTE);
+        return new RedirectResponse($mainRoute);
     }
 
     protected function getLoginUrl(Request $request): string
