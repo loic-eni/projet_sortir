@@ -13,11 +13,11 @@ class EditAccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('firstname')
-            ->add('lastname')
-            ->add('phone')
-            ->add('save', SubmitType::class)
+            ->add('email', null, ['label' => 'Email'])
+            ->add('firstname', null ,['label'=>'Prénom'])
+            ->add('lastname', null, ['label'=>'Nom'])
+            ->add('phone', null, ['label'=>'Téléphone'])
+            ->add('save', SubmitType::class, ['label'=>'Enregistrer les changements'])
         ;
     }
 
