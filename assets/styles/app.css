@@ -2,3 +2,36 @@ body {
     font-family: Arial, sans-serif;
     background-color: skyblue;
 }
+
+.alert {
+    animation: flash-message 5s;
+    opacity: 0;
+    margin-left: -200px;
+}
+
+@keyframes flash-message {
+    0%, 100% {
+        margin-left: -200px;
+        opacity: 0;
+    }
+
+    10%, 90% {
+        margin-left: 0;
+        opacity: 1;
+    }
+}
+
+.alert-container{
+    max-height: 0;
+    animation: flash-message-container 6s;
+}
+
+@keyframes flash-message-container {
+    0%, 70%{
+        max-height: 1000px;
+    }
+
+    100%{
+        max-height: 0;
+    }
+}
