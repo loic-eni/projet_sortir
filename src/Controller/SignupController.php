@@ -22,6 +22,7 @@ final class SignupController extends AbstractController
             $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
             $user->setRoles(['ROLE_USER']);
             $user->setAdmin(false);
+            $user->setActive(false);
 
             $entityManager->persist($user);
             $entityManager->flush();
