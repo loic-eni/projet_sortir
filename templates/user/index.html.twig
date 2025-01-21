@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Modifier mon compte{% endblock %}
 
 {% block body %}
 <style>
@@ -9,10 +9,10 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Modify account</h1>
+    <h1>Modifier mon compte</h1>
 
     {{ form(editAccountForm) }}
 
-    <a href="{{ path('app_changePassword') }}">change password</a>
+    <a href="{{ path('app_changePassword') }}">Changer mon mot de passe</a>
 </div>
 {% endblock %}

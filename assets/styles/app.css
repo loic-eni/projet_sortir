@@ -47,3 +47,10 @@ body {
     gap: 16px;
     align-items: end;
 }
+
+/*UTILS*/
+.row{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
