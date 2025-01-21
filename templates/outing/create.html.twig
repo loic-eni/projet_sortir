@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Create outing</h2>
+
+    {{ form_start(outingForm) }}
+    {{ form_widget(outingForm) }}
+    <button>Create a Outing !</button>
+    {{ form_end(outingForm) }}
+{% endblock %}
