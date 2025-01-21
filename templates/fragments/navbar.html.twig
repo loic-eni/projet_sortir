@@ -1,0 +1,35 @@
+{% block body %}
+    <div class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="{{ path("app_main") }}">Projet sortir</a>
+        </div>
+        {% if app.user %}
+        <div class="flex-none gap-2">
+            <div class="dropdown dropdown-end">
+                <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_create") }}">Créer une sortie</a>
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-10 rounded-full">
+                        <img
+                                alt="Tailwind CSS Navbar component"
+                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    </div>
+                </div>
+                <ul
+                        tabindex="0"
+                        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <li>
+                        <a class="justify-between" href="{{ path("app_user") }}">
+                            Profil
+                            <span class="badge">Nouveau</span>
+                        </a>
+                    </li>
+                    <li><a href="{{ path("app_logout") }}">Me déconnecter</a></li>
+                </ul>
+            </div>
+        </div>
+            {% else %}
+                <a class="btn btn-outline btn-primary mx-2" href="{{ path("app_signup") }}">M'inscrire</a>
+                <a class="btn btn-active btn-primary" href="{{ path("app_login") }}">Me connecter</a>
+        {% endif %}
+    </div>
+{% endblock %}
