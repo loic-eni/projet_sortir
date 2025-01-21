@@ -6,9 +6,9 @@ use App\Entity\Campus;
 use App\Entity\Location;
 use App\Entity\Outing;
 use App\Entity\State;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,11 +21,23 @@ class OutingType extends AbstractType
             ->add('startDate', null, [
                 'widget' => 'single_text',
             ])
-            ->add('duration')
+            ->add('duration', IntegerType::class, [
+                'attr' => [
+                    'min' => 1,
+                    'max' => 8,
+                    'step' => 1
+                ]
+            ])
             ->add('registrationMaxDate', null, [
                 'widget' => 'single_text',
             ])
-            ->add('maxInscriptions')
+            ->add('maxInscriptions', IntegerType::class, [
+                'attr' => [
+                    'min' => 0,
+                    'max' => 50,
+                    'step' => 1
+                ]
+            ])
             ->add('outingInfo')
             ->add('state', EntityType::class, [
                 'class' => state::class,
