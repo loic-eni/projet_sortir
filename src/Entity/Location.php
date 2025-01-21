@@ -25,7 +25,7 @@ class Location
     private ?float $lat = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $long = null;
+    private ?float $lng = null;
 
     #[ORM\ManyToOne(inversedBy: 'locations')]
     private ?city $city = null;
@@ -82,14 +82,14 @@ class Location
         return $this;
     }
 
-    public function getLong(): ?float
+    public function getLng(): ?float
     {
-        return $this->long;
+        return $this->lng;
     }
 
-    public function setLong(?float $long): static
+    public function setLng(?float $lng): static
     {
-        $this->long = $long;
+        $this->lng = $lng;
 
         return $this;
     }
