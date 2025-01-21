@@ -39,11 +39,6 @@ class OutingType extends AbstractType
                 'class' => campus::class,
                 'choice_label' => 'id',
             ])
-
-            ->add('organizer', EntityType::class, [
-                'class' => user::class,
-                'choice_label' => 'id',
-            ])
         ;
     }
 
