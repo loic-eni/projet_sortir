@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/outing', name: 'outing_')]
 final class OutingController extends AbstractController
@@ -23,6 +24,7 @@ final class OutingController extends AbstractController
     }
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
     public function create(Request $request,
                            EntityManagerInterface $entityManager,
                            OutingRepository $outingRepository
