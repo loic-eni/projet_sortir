@@ -27,7 +27,9 @@ final class SignupController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_login');
+            $this->addFlash('success', 'Account created.');
+
+            return $this->redirectToRoute('app_main');
         }
 
         return $this->render('signup/index.html.twig', [

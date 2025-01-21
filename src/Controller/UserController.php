@@ -21,10 +21,11 @@ final class UserController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
 
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Account updated.');
 
             return $this->redirectToRoute('app_login');
         }
@@ -54,6 +55,8 @@ final class UserController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Password changed.');
 
             return $this->redirectToRoute('app_main');
         }
