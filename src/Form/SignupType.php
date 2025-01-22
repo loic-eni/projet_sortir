@@ -15,11 +15,11 @@ class SignupType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('password', PasswordType::class)
-            ->add('firstname')
-            ->add('lastname')
-            ->add('phone')
-            ->add('save', SubmitType::class)
+            ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
+            ->add('firstname', null ,['label'=>'Prénom'])
+            ->add('lastname', null, ['label'=>'Nom'])
+            ->add('phone', null, ['label'=>'Téléphone'])
+            ->add('save', SubmitType::class, ['label'=>'Créer le compte'])
         ;
     }
 

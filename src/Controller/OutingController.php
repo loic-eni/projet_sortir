@@ -41,7 +41,7 @@ final class OutingController extends AbstractController
             $entityManager->persist($outing);
             $entityManager->flush();
 
-            $this->addFlash('success', 'New outing registered.');
+            $this->addFlash('success', 'Nouvelle sortie enregistrée.');
 
             return $this->redirectToRoute('outing_list');
         }

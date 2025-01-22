@@ -27,7 +27,7 @@ final class SignupController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Account created.');
+            $this->addFlash('success', 'Compte créé.');
 
             return $this->redirectToRoute('app_main');
         }

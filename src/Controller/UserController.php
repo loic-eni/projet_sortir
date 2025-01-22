@@ -25,7 +25,7 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Account updated.');
+            $this->addFlash('success', 'Compte modifié.');
 
             return $this->redirectToRoute('app_login');
         }
@@ -56,7 +56,7 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Password changed.');
+            $this->addFlash('success', 'Mot de passe changé.');
 
             return $this->redirectToRoute('app_main');
         }
