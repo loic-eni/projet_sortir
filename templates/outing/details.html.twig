@@ -4,43 +4,99 @@
     <h2 style="text-align: center;">Afficher une sortie</h2>
 
     <div class="container">
-        <div class="columns">
-            <div class="detailsField">
-                <strong>Nom de la sortie :</strong> {{ outing.name }}
+        <div class="w-3/4 flex justify-between">
+
+            <div class="w-2/4">
+                <h3 class="font-semibold text-2xl text-gray-800">{{ outing.name }} </h3>
+                <div class="card-text my-2 h4">
+                    {% if outing.state %}
+                    {% set stateClass = {
+                        (state[0]): 'text-success',
+                        (state[1]): 'text-success',
+                        (state[2]): 'text-danger',
+                        (state[3]): 'text-success',
+                        (state[4]): 'text-danger',
+                        (state[5]): 'text-danger',
+                        (state[5]): 'text-danger',
+                    }[outing.state.label] ?? '' %}
+                <div class="badge badge-outline {{ stateClass }}">{{ outing.state.label }}</div>
+                {% endif %}
+                </div>
+                <div class="detailsField">
+                    <strong>Lieu :</strong> {{ outing.location.name }}
+                </div>
+                <div class="detailsField">
+                    <strong>Rue :</strong> {{ outing.location.street }}
+                </div>
+                <div class="detailsField">
+                    <strong>Ville :</strong> {{ outing.location.city.name }}
+                </div>
+                <div class="detailsField">
+                    <strong>Code postal :</strong> {{ outing.location.city.zip }}
+                </div>
+                <div class="detailsField">
+                    <strong>Date et heure de la sortie :</strong> {{ outing.startDate |date('d/m/Y H:i', 'Europe/Paris') }}
+                </div>
+
+                <div class="detailsField">
+                    <strong>Date limite d'inscription :</strong> {{ outing.registrationMaxDate |date('d/m/Y H:i', 'Europe/Paris') }}
+                </div>
+                <div class="detailsField">
+                    <strong>Nombre de places :</strong> {{ outing.maxInscriptions }}
+                </div>
+                <div class="detailsField">
+                    <strong>Durée :</strong> {{ outing.duration }} minutes
+                </div>
+                <div class="detailsField">
+                    <strong>Description et infos :</strong> {{ outing.outingInfo }}
+                </div>
+                <div class="detailsField">
+                    <strong>Longitude :</strong> {{ outing.location.lng }}
+                </div>
+                <div class="detailsField">
+                    <strong>Latitude :</strong> {{ outing.location.lat }}
+                </div>
+                <div class="my-2">
+                    {% set isAlreadyRegistered = outing.participants|filter(user => user.id == app.user.id) %}
+
+                    {% if isAlreadyRegistered|length > 0 %}
+                        <a href="{{ path('outing_register_remove', {'id': outing.id}) }}" class="btn btn-warning w-100 my-1">Se désinscrire de cette sortie</a>
+                    {% else %}
+                        {% if outing.organizer.id != app.user.id %}
+                            {% if outing.state.label == 'Ouverte' and outing.participants|length < outing.maxInscriptions %}
+                                <a href="{{ path('outing_register_new', {'id': outing.id}) }}" class="btn btn-primary w-100 my-1">S'inscrire à cette sortie</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
-            <div class="detailsField">
-                <strong>Lieu :</strong> {{ outing.location.name }}
-            </div>
-            <div class="detailsField">
-                <strong>Date et heure de la sortie :</strong> {{ outing.startDate | date('Y-m-d') }}
-            </div>
-            <div class="detailsField">
-                <strong>Rue :</strong> {{ outing.location.street }}
-            </div>
-            <div class="detailsField">
-                <strong>Date limite d'inscription :</strong> {{ outing.registrationMaxDate | date('Y-m-d') }}
-            </div>
-            <div class="detailsField">
-                <strong>Ville :</strong> {{ outing.location.city.name }}
-            </div>
-            <div class="detailsField">
-                <strong>Nombre de places :</strong> {{ outing.maxInscriptions }}
-            </div>
-            <div class="detailsField">
-                <strong>Code postal :</strong> {{ outing.location.city.zip }}
-            </div>
-            <div class="detailsField">
-                <strong>Durée :</strong> {{ outing.duration }} minutes
-            </div>
-            <div class="detailsField">
-                <strong>Latitude :</strong> {{ outing.location.lat }}
-            </div>
-            <div class="detailsField">
-                <strong>Description et infos :</strong> {{ outing.outingInfo }}
-            </div>
-            <div class="detailsField">
-                <strong>Longitude :</strong> {{ outing.location.lng }}
+            <div class="divider lg:divider-horizontal"></div>
+            <div class="overflow-x-auto w-1/3">
+                <h3 class="font-semibold text-xl text-gray-800">{{ participants|length}} participant(s) inscrits  </h3>
+                <table class="table table-zebra">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for participant in participants %}
+                        <tr>
+                            <th>{{ participant.id }}</th>
+                            <td>{{ participant.firstname }}</td>
+                            <td>{{ participant.lastname }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="2">Aucun participant trouvé.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
+
     </div>
 {% endblock %}
