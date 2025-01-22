@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Log in!{% endblock %}
 
 {% block body %}
 <form method="post">
@@ -13,26 +13,45 @@
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="checkbox mb-3 row">
-        <input type="checkbox" name="_remember_me">
-        <label for="_remember_me">
-            Se souvenir de moi
-        </label>
+    <div class="flex justify-center items-center self-center  z-10 h-dvh">
+        <div class="p-12 bg-white mx-auto rounded-2xl w-100 shadow-xl">
+            <div class="mb-4">
+                <h3 class="font-semibold text-2xl text-gray-800">Connexion </h3>
+            </div>
+            <div class="space-y-5">
+                <div class="space-y-2">
+                    <label for="inputEmail" class="text-sm font-medium text-gray-700 tracking-wide">Email</label>
+                    <input class=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400" type="email" value="{{ last_username }}" name="email" id="inputEmail" placeholder="mail@gmail.com">
+                </div>
+                <div class="space-y-2">
+                    <label for="inputPassword" class="mb-5 text-sm font-medium text-gray-700 tracking-wide">
+                        Mot de passe
+                    </label>
+                    <input class="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"  type="password" name="password" id="inputPassword" placeholder="Enter your password" autocomplete="current-password" required>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember_me" type="checkbox" name="_remember_me" class="h-4 w-4 bg-blue-500 focus:ring-blue-400 border-gray-300 rounded">
+                        <label for="remember_me" class="ml-2 block text-sm text-gray-800">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#" class="text-blue-400">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
+                        Se connecter
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Me connecter
-    </button>
 </form>
 {% endblock %}
