@@ -6,7 +6,16 @@
     <h2>Préparer une sortie</h2>
 
     {{ form_start(outingForm) }}
-    {{ form_widget(outingForm) }}
-    <button>Créer une sortie</button>
+        {{ form_row(outingForm.name) }}
+        {{ form_row(outingForm.startDate) }}
+        {{ form_row(outingForm.duration) }}
+        {{ form_row(outingForm.registrationMaxDate) }}
+        {{ form_row(outingForm.maxInscriptions) }}
+        {{ form_row(outingForm.outingInfo) }}
+        {{ form_row(outingForm.location) }}
+        <button type="button" a=""><strong>+</strong></button>
+        {{ form_row(outingForm.campus) }}
+
+        <button type="submit">Créer une sortie</button>
     {{ form_end(outingForm) }}
 {% endblock %}
