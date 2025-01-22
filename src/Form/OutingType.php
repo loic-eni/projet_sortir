@@ -17,46 +17,53 @@ class OutingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', null, ['label' => 'Nom'])
+            ->add('name', null, [
+                'label' => 'Nom: ',
+                'attr' => ['class' => 'formField'],
+            ])
             ->add('startDate', null, [
                 'widget' => 'single_text',
-                'label' => 'Date de début'
+                'label' => 'Date de début: ',
+                'attr' => ['class' => 'formField'],
             ])
             ->add('duration', IntegerType::class, [
                 'attr' => [
                     'min' => 1,
                     'max' => 8,
-                    'step' => 1
+                    'step' => 1,
+                    'class' => 'formField',
                 ],
-                'label' => 'Durée'
+                'label' => 'Durée: '
             ])
             ->add('registrationMaxDate', null, [
                 'widget' => 'single_text',
-                'label' => 'Date d\'inscription'
+                'label' => 'Date d\'inscription: ',
+                'attr' => ['class' => 'formField'],
             ])
             ->add('maxInscriptions', IntegerType::class, [
                 'attr' => [
                     'min' => 0,
                     'max' => 50,
-                    'step' => 1
+                    'step' => 1,
+                    'class' => 'formField',
                 ],
-                'label' => 'Nombre maximum d\'inscriptions'
+                'label' => 'Nombre maximum d\'inscriptions: '
             ])
-            ->add('outingInfo', null, ['label' => 'Informations'])
-            ->add('state', EntityType::class, [
-                'class' => state::class,
-                'choice_label' => 'id',
-                'label' => 'État'
+            ->add('outingInfo', null, [
+                'label' => 'Informations',
+                'attr' => ['class' => 'formField'],
             ])
             ->add('location', EntityType::class, [
                 'class' => location::class,
-                'choice_label' => 'id',
-                'label' => 'Localisation'
+                'choice_label' => 'name',
+                'label' => 'Localisation: ',
+                'attr' => ['class' => 'formField'],
             ])
             ->add('campus', EntityType::class, [
                 'class' => campus::class,
-                'choice_label' => 'id',
-                'label' => 'Campus'
+                'choice_label' => 'name',
+                'label' => 'Campus: ',
+                'attr' => ['class' => 'formField'],
             ])
         ;
     }

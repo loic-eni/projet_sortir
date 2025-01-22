@@ -69,3 +69,7 @@ body {
     flex: 1 1 45%;
     text-align: left;
 }
+
+.formField {
+    border: 1px solid black;
+}
