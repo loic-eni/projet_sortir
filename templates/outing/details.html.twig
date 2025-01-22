@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2 style="text-align: center;">Afficher une sortie</h2>
+
+    <div class="container">
+        <div class="columns">
+            <div class="detailsField">
+                <strong>Nom de la sortie :</strong> {{ outing.name }}
+            </div>
+            <div class="detailsField">
+                <strong>Lieu :</strong> {{ outing.location.name }}
+            </div>
+            <div class="detailsField">
+                <strong>Date et heure de la sortie :</strong> {{ outing.startDate | date('Y-m-d') }}
+            </div>
+            <div class="detailsField">
+                <strong>Rue :</strong> {{ outing.location.street }}
+            </div>
+            <div class="detailsField">
+                <strong>Date limite d'inscription :</strong> {{ outing.registrationMaxDate | date('Y-m-d') }}
+            </div>
+            <div class="detailsField">
+                <strong>Ville :</strong> {{ outing.location.city.name }}
+            </div>
+            <div class="detailsField">
+                <strong>Nombre de places :</strong> {{ outing.maxInscriptions }}
+            </div>
+            <div class="detailsField">
+                <strong>Code postal :</strong> {{ outing.location.city.zip }}
+            </div>
+            <div class="detailsField">
+                <strong>Durée :</strong> {{ outing.duration }} minutes
+            </div>
+            <div class="detailsField">
+                <strong>Latitude :</strong> {{ outing.location.lat }}
+            </div>
+            <div class="detailsField">
+                <strong>Description et infos :</strong> {{ outing.outingInfo }}
+            </div>
+            <div class="detailsField">
+                <strong>Longitude :</strong> {{ outing.location.lng }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

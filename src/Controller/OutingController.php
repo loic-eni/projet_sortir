@@ -51,4 +51,23 @@ final class OutingController extends AbstractController
             ]
         );
     }
+
+    #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function details(int $id,
+                            Request $request,
+                           EntityManagerInterface $entityManager,
+                           OutingRepository $outingRepository
+    ): Response
+    {
+        $outing = $outingRepository->find($id);
+
+        if(!$outing){
+            throw $this->createNotFoundException("Outing not found");
+        }
+
+        return $this->render('outing/details.html.twig', [
+                'outing' => $outing,
+            ]
+        );
+    }
 }
