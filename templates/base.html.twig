@@ -19,7 +19,9 @@
     {% include "fragments/navbar.html.twig" %}
 
     {% include "fragments/flashMessages.html.twig" %}
+    <div class="my-10">
+        {% block body %}{% endblock %}
+    </div>
 
-    {% block body %}{% endblock %}
     </body>
 </html>
