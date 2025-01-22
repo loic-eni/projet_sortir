@@ -32,7 +32,7 @@ final class SignupController extends AbstractController
             return $this->redirectToRoute('app_main');
         }
 
-        return $this->render('signup/index.html.twig', [
+        return $this->render('signup/create.html.twig', [
             'controller_name' => 'SignupController',
             'signupForm' => $form->createView(),
         ]);
