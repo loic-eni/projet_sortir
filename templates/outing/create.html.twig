@@ -13,7 +13,7 @@
         {{ form_row(outingForm.maxInscriptions) }}
         {{ form_row(outingForm.outingInfo) }}
         {{ form_row(outingForm.location) }}
-        <button type="button" a=""><strong>+</strong></button>
+        <a href={{ path('location_create') }}><button type="button"><strong>+</strong></button></a>
         {{ form_row(outingForm.campus) }}
 
         <button type="submit">Créer une sortie</button>
