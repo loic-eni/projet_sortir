@@ -43,6 +43,7 @@ security:
         - { path: ^/signup, roles: PUBLIC_ACCESS }
         - { path: ^/outing/create, roles: ROLE_USER }
         - { path: ^/outing, roles: PUBLIC_ACCESS }
+        - { path: ^/location/create, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER

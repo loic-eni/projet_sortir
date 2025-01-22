@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LocationController!{% endblock %}
+
+{% block body %}
+    {{ form_start(locationForm) }}
+        {{ form_row(locationForm.name) }}
+        {{ form_row(locationForm.street) }}
+        {{ form_row(locationForm.lat) }}
+        {{ form_row(locationForm.lng) }}
+        {{ form_row(locationForm.city) }}
+        <button type="submit">Enregistrer une sortie</button>
+    {{ form_end(locationForm) }}
+{% endblock %}
