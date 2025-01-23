@@ -58,14 +58,15 @@
                 </div>
                 <div class="my-2">
                     {% set isAlreadyRegistered = outing.participants|filter(user => user.id == app.user.id) %}
-
                     {% if isAlreadyRegistered|length > 0 %}
                         <a href="{{ path('outing_register_remove', {'id': outing.id}) }}" class="btn btn-warning w-100 my-1">Se désinscrire de cette sortie</a>
                     {% else %}
                         {% if outing.organizer.id != app.user.id %}
-                            {% if outing.state.label == 'Ouverte' and outing.participants|length < outing.maxInscriptions %}
+                            {% if (outing.state.label == state[0] or outing.state.label == state[1]) and outing.participants|length < outing.maxInscriptions %}
                                 <a href="{{ path('outing_register_new', {'id': outing.id}) }}" class="btn btn-primary w-100 my-1">S'inscrire à cette sortie</a>
                             {% endif %}
+                            {% else %}
+                            <p class="badge badge-outline">Vous êtes l'organisateur</p>
                         {% endif %}
                     {% endif %}
                 </div>
