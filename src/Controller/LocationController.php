@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/location', name: 'location_')]
 final class LocationController extends AbstractController
 {
-    #[Route('/location/create', name: 'create', methods: ['GET', 'POST'])]
+    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[isGranted('ROLE_USER')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
