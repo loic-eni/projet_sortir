@@ -32,8 +32,8 @@ final class CityFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'name' => self::faker()->text(255),
-            'zip' => self::faker()->text(255),
+            'name' => self::faker()->text(50),
+            'zip' => self::faker()->postcode(),
         ];
     }
 
