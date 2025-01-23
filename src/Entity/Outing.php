@@ -52,6 +52,9 @@ class Outing
     #[ORM\ManyToOne(inversedBy: 'outings')]
     private ?user $organizer = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reason = null;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -205,6 +208,18 @@ class Outing
     public function setOrganizer(?user $organizer): static
     {
         $this->organizer = $organizer;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(?string $reason): static
+    {
+        $this->reason = $reason;
 
         return $this;
     }
