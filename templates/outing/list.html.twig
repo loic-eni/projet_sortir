@@ -4,8 +4,22 @@
 
 {% block body %}
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+        <div style="max-width: 50%">
+            {{ form_row(form.campus) }}
+            {{ form_row(form.nameSearch) }}
+            <div class="flex row">
+                {{ form_row(form.startsAfter) }}
+                {{ form_row(form.startsBefore) }}
+            </div>
+        </div>
+        <div>
+            {{ form_row(form.userOrganizer) }}
+            {{ form_row(form.userRegistered) }}
+            {{ form_row(form.outingPast) }}
+        </div>
 
+    {{ form_end(form) }}
     <hr>
 
     <ul>
