@@ -66,10 +66,6 @@ final class OutingController extends BaseController
 
         $participants = $outing->getParticipants();
 
-        if(!$outing){
-            throw $this->createNotFoundException("Outing not found");
-        }
-
         return $this->render('outing/details.html.twig', [
                 'outing' => $outing,
                 'participants' => $participants,
