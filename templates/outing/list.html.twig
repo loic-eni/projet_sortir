@@ -3,5 +3,49 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block body %}
-    <h2>Outing list</h2>
+    <form method="post" data-turbo="false">
+        <div>
+            <div class="row" >
+                <label for="campus">site: </label>
+                <select id="campus" name="campus">
+                    {% for campus in campuses %}
+                        <option value="{{ campus.id }}">{{ campus.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row">
+                <label for="nameSearch">Le nom de la sortie contient: </label>
+                <input type="text" id="nameSearch" name="nameSearch"/>
+            </div>
+
+            <div class="row">
+                <label for="startsAfter">Entre</label>
+                <input type="datetime-local" id="startsAfter" name="startsAfter">
+                <label for="endsBefore">et</label>
+                <input type="datetime-local" id="endsBefore" name="endsBefore">
+            </div>
+        </div>
+
+    <div>
+        <input type="checkbox" id="userIsOrganizer" name="userIsOrganizer">
+        <label for="userIsOrganizer">Sorties dont je suis l'organisateur/trice</label>
+        <input type="checkbox" id="userIsRegistered" name="userIsRegistered">
+        <label for="userIsRegistered">Sorties auxquelles je suis inscrit/e</label>
+        <input type="checkbox" id="outingIsPast" name="outingIsPast">
+        <label for="outingIsPast">Sorties passées</label>
+    </div>
+
+        <button type="submit">Rechercher</button>
+
+    </form>
+
+    <hr>
+
+    <ul>
+        {% for outing in outings %}
+            <li><a href="{{ path('outing_details', {id: outing.id}) }}">{{ outing.name }}</a></li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
