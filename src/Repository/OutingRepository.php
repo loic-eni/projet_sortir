@@ -44,6 +44,10 @@ class OutingRepository extends ServiceEntityRepository
             $query
                 ->andWhere('o.startDate <= :now')
                 ->setParameter('now', new \DateTime());
+        else
+            $query
+                ->andWhere('o.startDate >= :now')
+                ->setParameter('now', new \DateTime());
 
         if($filter->getUser() !== null){
             if($filter->isUserOrganizer())

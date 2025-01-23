@@ -34,7 +34,7 @@ final class OutingController extends AbstractController
 
         dump($form->getErrors());
         dump($request->getMethod());
-        dump($user != null);
+        dump($form->isSubmitted());
 
         if($form->isSubmitted() && $form->isValid() && $user != null){
             $outingFilter = $form->getData();
@@ -44,10 +44,10 @@ final class OutingController extends AbstractController
 
             $outings = $outingRepository->findByFilter($outingFilter);
 
-            return $this->render('outing/list.html.twig', [
+            return new Response($this->renderView('outing/list.html.twig', [
                 'outings' => $outings,
                 'outingFilterForm' => $form,
-            ]);
+            ]), 201);
         }
 
         $outings = $outingRepository->findAll();
