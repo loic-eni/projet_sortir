@@ -30,7 +30,7 @@ final class UserController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('user/create.html.twig', [
+        return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
             'editAccountForm' => $form->createView(),
         ]);
