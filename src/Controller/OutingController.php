@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Outing;
+use App\Entity\User;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
@@ -84,6 +85,7 @@ final class OutingController extends BaseController
             return $this->redirectToRoute('app_login');
         }
 
+        /** @var User $user */
         $user = $this->getUser();
 
         if ($outing->getParticipants()->contains($user)) {
@@ -117,20 +119,24 @@ final class OutingController extends BaseController
             return $this->redirectToRoute('app_login');
         }
 
+        /** @var User $user */
         $user = $this->getUser();
 
         if ($outing->getParticipants()->contains($user)) {
-            $outing->removeParticipant($user);
 
-            $entityManager->persist($outing);
-            $entityManager->flush();
+            if ($outing->getStartDate() > new \DateTime()) {
+                $outing->removeParticipant($user);
+                $entityManager->persist($outing);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Vous avez été retiré de la sortie.');
+                $this->addFlash('success', 'Vous avez été retiré de la sortie.');
+            } else {
+                $this->addFlash('warning', 'Vous ne pouvez pas vous désister, la sortie a déjà commencé.');
+            }
         } else {
             $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cette sortie.');
         }
 
         return $this->redirectToRoute('outing_details', ['id' => $outing->getId()]);
     }
-
 }
