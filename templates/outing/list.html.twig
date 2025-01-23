@@ -5,19 +5,39 @@
 {% block body %}
 
     {{ form_start(form) }}
-        <div style="max-width: 50%">
-            {{ form_row(form.campus) }}
-            {{ form_row(form.nameSearch) }}
-            <div class="flex row">
-                {{ form_row(form.startsAfter) }}
-                {{ form_row(form.startsBefore) }}
-            </div>
+    <div>
+        <div class="row" >
+            <label for="{{ field_name(form.campus) }}">site: </label>
+            <select id="{{ field_name(form.campus) }}" name="{{ field_name(form.campus) }}">
+                {% for label, value in field_choices(form.campus) %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <div>
-            {{ form_row(form.userOrganizer) }}
-            {{ form_row(form.userRegistered) }}
-            {{ form_row(form.outingPast) }}
+
+        <div class="row">
+            <label for="nameSearch">Le nom de la sortie contient: </label>
+            <input type="text" id="{{ field_name(form.nameSearch) }}" name="{{ field_name(form.nameSearch) }}" value="{{ field_value(form.nameSearch) }}"/>
         </div>
+
+        <div class="row">
+            <label for="{{ field_name(form.startsAfter) }}">Entre</label>
+            <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}">
+            <label for="{{ field_name(form.startsBefore) }}">et</label>
+            <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}">
+        </div>
+    </div>
+
+    <div class="flex column">
+        <input type="checkbox" id="{{ field_name(form.userOrganizer) }}" name="{{ field_name(form.userOrganizer) }}">
+        <label for="{{ field_name(form.userOrganizer) }}">Sorties dont je suis l'organisateur/trice</label>
+        <input type="checkbox" id="{{ field_name(form.userRegistered) }}" name="{{ field_name(form.userRegistered) }}">
+        <label for="{{ field_name(form.userRegistered) }}">Sorties auxquelles je suis inscrit/e</label>
+        <input type="checkbox" id="{{ field_name(form.outingPast) }}" name="{{ field_name(form.outingPast) }}">
+        <label for="{{ field_name(form.outingPast) }}">Sorties passées</label>
+    </div>
+
+    <button type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}">Rechercher</button>
 
     {{ form_end(form) }}
     <hr>
