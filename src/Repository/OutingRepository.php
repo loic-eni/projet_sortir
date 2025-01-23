@@ -17,7 +17,7 @@ class OutingRepository extends ServiceEntityRepository
         parent::__construct($registry, Outing::class);
     }
 
-    public function findByFilter(OutingFilter $filter, ?int $limit){
+    public function findByFilter(OutingFilter $filter, ?int $limit = 20){
         $query = $this->createQueryBuilder('o')->setMaxResults($limit|10);
 
         if($filter->getCampus() !== null)
@@ -35,10 +35,10 @@ class OutingRepository extends ServiceEntityRepository
                 ->andWhere('o.startDate >= :startsAfter')
                 ->setParameter('startsAfter', $filter->getStartsAfter());
 
-        if($filter->getEndsBefore() !== null)
+        if($filter->getStartsBefore() !== null)
             $query
                 ->andWhere('o.startDate <= :endsBefore')
-                ->setParameter('endsBefore', $filter->getEndsBefore());
+                ->setParameter('endsBefore', $filter->getStartsBefore());
 
         if($filter->isOutingPast())
             $query

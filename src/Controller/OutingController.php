@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\OutingFilter;
 use App\Entity\Outing;
+use App\Form\OutingFilterType;
 use App\Form\OutingType;
 use App\Repository\CampusRepository;
 use App\Repository\OutingRepository;
@@ -22,49 +23,38 @@ final class OutingController extends AbstractController
     #[Route('/list', name: 'list')]
     public function list(CampusRepository $campusRepository, OutingRepository $outingRepository,UserRepository $userRepository, Request $request): Response
     {
-        $campuses = $campusRepository->findAll();
 
         $user = $this->getUser();
         if($user)
             $user = $userRepository->find($user->getId());
 
-        if($request->isMethod('POST') && $user !== null) {
-            $req = $request->request;
+        $outingFilter = new OutingFilter();
+        $form = $this->createForm(OutingFilterType::class, $outingFilter);
+        $form->handleRequest($request);
 
-            $campus = $campusRepository->find($req->get('campus'));
-            $startsAfter =  DateTimeUtils::parseHtmlDateTimeInput($req->get('startsAfter'));
-            $endsBefore = DateTimeUtils::parseHtmlDateTimeInput($req->get('endsBefore'));
+        dump($form->getErrors());
+        dump($request->getMethod());
+        dump($user != null);
 
+        if($form->isSubmitted() && $form->isValid() && $user != null){
+            $outingFilter = $form->getData();
+            $outingFilter->setUser($user);
 
-            $outingFilter = (new OutingFilter())
-                ->withUser($user)
-                ->whereCampus($campus)
-                ->whereNameContains($req->get('nameSearch'))
-                ->whereUserIsOrganizer($req->getBoolean('userIsOrganizer'))
-                ->whereUserIsRegistered($req->getBoolean('userIsRegistered'))
-                ->whereOutingIsPast($req->getBoolean('outingIsPast'));
+            dump($outingFilter);
 
-            if($startsAfter !== false)
-                $outingFilter->whereStartsAfter($startsAfter);
-            if($endsBefore !== false)
-                $outingFilter->whereEndsBefore($endsBefore);
-
-            $outings = $outingRepository->findByFilter($outingFilter, 20);
-
-            dump($outings);
+            $outings = $outingRepository->findByFilter($outingFilter);
 
             return $this->render('outing/list.html.twig', [
                 'outings' => $outings,
-                'campuses' => $campuses,
+                'outingFilterForm' => $form,
             ]);
         }
 
         $outings = $outingRepository->findAll();
 
         return $this->render('outing/list.html.twig', [
-            'controller_name' => 'OutingController',
-            'campuses' => $campuses,
-            'outings' => $outings
+            'outings' => $outings,
+            'outingFilterForm' => $form,
         ]);
     }
 
