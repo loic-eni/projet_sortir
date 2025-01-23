@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% set dateStart = outing.startDate |date('d/m/Y H:i', 'Europe/Paris') %}
     <h2 style="text-align: center;">Afficher une sortie</h2>
 
     <div class="container">
@@ -15,9 +16,9 @@
                         (state[1]): 'text-success',
                         (state[2]): 'text-danger',
                         (state[3]): 'text-success',
-                        (state[4]): 'text-danger',
-                        (state[5]): 'text-danger',
-                        (state[5]): 'text-danger',
+                        (state[4]): 'badge-error ',
+                        (state[5]): 'badge-error ',
+                        (state[5]): 'badge-error ',
                     }[outing.state.label] ?? '' %}
                 <div class="badge badge-outline {{ stateClass }}">{{ outing.state.label }}</div>
                 {% endif %}
@@ -67,6 +68,28 @@
                             {% endif %}
                             {% else %}
                             <p class="badge badge-outline">Vous êtes l'organisateur</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center">
+                    {% if outing.organizer.id == app.user.id %}
+                        {% if outing.state.label == state[5] %}
+                            <p class="badge badge-error">Sortie annulée</p>
+                            <p>Motif de l'annulation: {{ outing.reason }}</p>
+                        {% else %}
+                            <div class="m-2">
+                                {% set dateStart = outing.startDate|date("Y-m-d H:i:s") %}
+                                {% set currentDate = "now"|date("Y-m-d H:i:s", "Europe/Paris") %}
+
+                                {% if dateStart > currentDate %}
+                                    <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
+                                       class="btn btn-error w-100 my-1">
+                                        Annulation
+                                    </a>
+                                {% else %}
+                                    <p class="badge badge-warning w-100 ">La sortie est commencée, impossible d'annuler</p>
+                                {% endif %}
+                            </div>
                         {% endif %}
                     {% endif %}
                 </div>

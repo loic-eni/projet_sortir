@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Outing;
+use App\Entity\State;
 use App\Entity\User;
+use App\Form\OutingCancel;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -135,5 +138,35 @@ final class OutingController extends BaseController
         }
 
         return $this->redirectToRoute('outing_details', ['id' => $outing->getId()]);
+    }
+
+    #[Route('/{id}/cancel', name: 'cancel', methods: ['GET', 'POST'])]
+    public function cancel(Request $request, Outing $outing, EntityManagerInterface $entityManager): Response
+    {
+        $currentUser = $this->getUser();
+
+        if ($currentUser !== $outing->getOrganizer()) {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
+        }
+
+        if ($outing->getStartDate() <= new \DateTime()) {
+            throw new AccessDeniedException("La sortie a déjà commencé ou est passée, vous ne pouvez pas l'annuler.");
+        }
+
+        $form = $this->createForm(OutingCancel::class, $outing);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $outing->setState($entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CANCELED]));
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La sortie ' . $outing->getName() . ' a bien été annulée.');
+            return $this->redirectToRoute('outing_details', ['id' => $outing->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('outing/cancel.html.twig', [
+            'outing' => $outing,
+            'form_cancel' => $form,
+        ]);
     }
 }
