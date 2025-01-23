@@ -12,7 +12,6 @@ use App\Form\OutingType;
 use App\Repository\CampusRepository;
 use App\Repository\OutingRepository;
 use App\Repository\UserRepository;
-use App\Utils\DateTimeUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +25,6 @@ final class OutingController extends BaseController
     #[Route('/list', name: 'list')]
     public function list(CampusRepository $campusRepository, OutingRepository $outingRepository,UserRepository $userRepository, Request $request): Response
     {
-
         $user = $this->getUser();
         if($user)
             $user = $userRepository->find($user->getId());
@@ -34,10 +32,6 @@ final class OutingController extends BaseController
         $outingFilter = new OutingFilter();
         $form = $this->createForm(OutingFilterType::class, $outingFilter);
         $form->handleRequest($request);
-
-        dump($form->getErrors());
-        dump($request->getMethod());
-        dump($form->isSubmitted());
 
         if($form->isSubmitted() && $form->isValid() && $user != null){
             $outingFilter = $form->getData();
@@ -49,14 +43,15 @@ final class OutingController extends BaseController
 
             return new Response($this->renderView('outing/list.html.twig', [
                 'outings' => $outings,
-                'outingFilterForm' => $form,
+                'form' => $form,
             ]), 201);
         }
 
         $outings = $outingRepository->findAll();
 
         return $this->render('outing/list.html.twig', [
-            'controller_name' => 'OutingController',
+            'outings'=>$outings,
+            'form' => $form,
         ]);
     }
 
