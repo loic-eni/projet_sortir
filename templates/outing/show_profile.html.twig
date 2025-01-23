@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+            <div>
+                <div>
+                    <h3 class="text-2xl font-bold text-center my-3">{{ user.firstname }} {{ user.lastname }}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>Téléphone :</strong>
+                        {{ user.phone }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Email :</strong>
+                        {{ user.email }}
+                    </p>
+                    <h4 class="text-l font-bold">Campus</h4>
+                    {% if user.campus != null %}
+                        <p>Nom du campus : {{ user.campus.name }}</p>
+                        {% else %}
+                        <p class="italic">Aucun campus</p>
+                    {% endif %}
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
+

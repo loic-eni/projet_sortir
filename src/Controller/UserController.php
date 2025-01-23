@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\EditAccountType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -62,5 +63,13 @@ final class UserController extends AbstractController
         }
 
         return $this->render('user/changePassword.html.twig', ['changePasswordForm' => $form->createView()]);
+    }
+
+    #[Route('/profile/user/{id}', name: 'app_show_profile', methods: ['GET'])]
+    public function showProfile(User $user): Response
+    {
+        return $this->render('outing/show_profile.html.twig', [
+            'user' => $user,
+        ]);
     }
 }
