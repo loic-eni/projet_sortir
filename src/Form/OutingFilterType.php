@@ -21,9 +21,9 @@ class OutingFilterType extends AbstractType
             ->add('nameSearch', SearchType::class, ['label'=>'Le nom de la sortie contient: ', 'required'=>false])
             ->add('startsAfter', DateTimeType::class, ['label'=>'Entre ', 'required'=>false])
             ->add('startsBefore', DateTimeType::class, ['label'=>'et ', 'required'=>false])
-            ->add('userOrganizer', CheckboxType::class, ['label'=>'Sorties dont je suis l\'organisateur/trice', 'required'=>false])
-            ->add('userRegistered', CheckboxType::class, ['label'=>'Sorties auxquelles je suis inscrit/e', 'required'=>false])
-            ->add('outingPast', CheckboxType::class, ['label'=>'Sorties passées', 'required'=>false])
+            ->add('userOrganizer', CheckboxType::class, ['label'=>'Sorties dont je suis l\'organisateur/trice', 'required'=>false, 'attr'=>['class'=>'checkbox checkbox-primary']])
+            ->add('userRegistered', CheckboxType::class, ['label'=>'Sorties auxquelles je suis inscrit/e', 'required'=>false, 'attr'=>['class'=>'checkbox checkbox-primary']])
+            ->add('outingPast', CheckboxType::class, ['label'=>'Sorties passées', 'required'=>false, 'attr'=>['class'=>'checkbox checkbox-primary']])
             ->add('find', SubmitType::class, ['label'=>'Rechercher']);
     }
 

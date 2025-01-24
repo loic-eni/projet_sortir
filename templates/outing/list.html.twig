@@ -6,43 +6,55 @@
 
     {% if(is_granted('ROLE_USER')) %}
     {{ form_start(form) }}
-    <div>
-        <div class="row" >
-            <label for="{{ field_name(form.campus) }}">site: </label>
-            <select id="{{ field_name(form.campus) }}" name="{{ field_name(form.campus) }}">
-                {% for label, value in field_choices(form.campus) %}
-                    <option value="{{ value }}">{{ label }}</option>
-                {% endfor %}
-            </select>
+        <div class="p-6 bg-white mx-auto rounded-2xl w-100 shadow-xl gap-20 flex-col w-3/4">
+            <div class="flex-row flex-center gap-20">
+                <div class="gap-10 flex-col">
+                    <div class="flex-center gap-10" >
+                        <label for="{{ field_name(form.campus) }}">Site: </label>
+                        <select id="{{ field_name(form.campus) }}" name="{{ field_name(form.campus) }}" class="select select-primary w-full max-w-xs">
+                            {% for label, value in field_choices(form.campus) %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <label for="nameSearch" class="input input-bordered input-primary flex items-center gap-2">
+                            Le nom de la sortie contient:
+                            <input type="text" id="{{ field_name(form.nameSearch) }}" name="{{ field_name(form.nameSearch) }}" value="{{ field_value(form.nameSearch) }}"/>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label for="{{ field_name(form.startsAfter) }}">Entre</label>
+                        <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}" value="{{ field_value(form.startsAfter) }}">
+                        <label for="{{ field_name(form.startsBefore) }}">et</label>
+                        <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}" value="{{ field_value(form.startsBefore) }}">
+                    </div>
+                </div>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="flex-col gap-10">
+                    <div class="flex-row flex-center gap-10">
+                        {{ form_widget(form.userOrganizer) }}
+                        {{ form_label(form.userOrganizer) }}
+                    </div>
+                    <div class="flex-row flex-center gap-10">
+                        {{ form_widget(form.userRegistered) }}
+                        {{ form_label(form.userRegistered) }}
+                    </div>
+                    <div class="flex-row flex-center gap-10">
+                        {{ form_widget(form.outingPast) }}
+                        {{ form_label(form.outingPast) }}
+                    </div>
+                </div>
+            </div>
+
+{#            <div class="divider"></div>#}
+
+            <input type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}" value="Rechercher" class="w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
         </div>
-
-        <div class="row">
-            <label for="nameSearch">Le nom de la sortie contient: </label>
-            <input type="text" id="{{ field_name(form.nameSearch) }}" name="{{ field_name(form.nameSearch) }}" value="{{ field_value(form.nameSearch) }}"/>
-        </div>
-
-        <div class="row">
-            <label for="{{ field_name(form.startsAfter) }}">Entre</label>
-            <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}" value="{{ field_value(form.startsAfter) }}">
-            <label for="{{ field_name(form.startsBefore) }}">et</label>
-            <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}" value="{{ field_value(form.startsBefore) }}">
-        </div>
-    </div>
-
-    <div class="flex column">
-        {{ form_widget(form.userOrganizer) }}
-        {{ form_label(form.userOrganizer) }}
-
-        {{ form_widget(form.userRegistered) }}
-        {{ form_label(form.userRegistered) }}
-
-        {{ form_widget(form.outingPast) }}
-        {{ form_label(form.outingPast) }}
-
-    </div>
-
-    <input type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}" value="Rechercher">
-
     {{ form_end(form) }}
     {% endif %}
     <hr>
