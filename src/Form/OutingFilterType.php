@@ -31,6 +31,7 @@ class OutingFilterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => OutingFilter::class,
+            'method' => 'GET'
         ]);
     }
 }

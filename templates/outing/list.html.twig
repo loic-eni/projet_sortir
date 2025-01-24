@@ -4,6 +4,7 @@
 
 {% block body %}
 
+    {% if(is_granted('ROLE_USER')) %}
     {{ form_start(form) }}
     <div>
         <div class="row" >
@@ -22,24 +23,28 @@
 
         <div class="row">
             <label for="{{ field_name(form.startsAfter) }}">Entre</label>
-            <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}">
+            <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}" value="{{ field_value(form.startsAfter) }}">
             <label for="{{ field_name(form.startsBefore) }}">et</label>
-            <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}">
+            <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}" value="{{ field_value(form.startsBefore) }}">
         </div>
     </div>
 
     <div class="flex column">
-        <input type="checkbox" id="{{ field_name(form.userOrganizer) }}" name="{{ field_name(form.userOrganizer) }}">
-        <label for="{{ field_name(form.userOrganizer) }}">Sorties dont je suis l'organisateur/trice</label>
-        <input type="checkbox" id="{{ field_name(form.userRegistered) }}" name="{{ field_name(form.userRegistered) }}">
-        <label for="{{ field_name(form.userRegistered) }}">Sorties auxquelles je suis inscrit/e</label>
-        <input type="checkbox" id="{{ field_name(form.outingPast) }}" name="{{ field_name(form.outingPast) }}">
-        <label for="{{ field_name(form.outingPast) }}">Sorties passées</label>
+        {{ form_widget(form.userOrganizer) }}
+        {{ form_label(form.userOrganizer) }}
+
+        {{ form_widget(form.userRegistered) }}
+        {{ form_label(form.userRegistered) }}
+
+        {{ form_widget(form.outingPast) }}
+        {{ form_label(form.outingPast) }}
+
     </div>
 
-    <button type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}">Rechercher</button>
+    <input type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}" value="Rechercher">
 
     {{ form_end(form) }}
+    {% endif %}
     <hr>
 
     <ul>

@@ -29,8 +29,7 @@ final class OutingController extends BaseController
         if($user)
             $user = $userRepository->find($user->getId());
 
-        $outingFilter = new OutingFilter();
-        $form = $this->createForm(OutingFilterType::class, $outingFilter);
+        $form = $this->createForm(OutingFilterType::class);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid() && $user != null){
@@ -41,10 +40,12 @@ final class OutingController extends BaseController
 
             $outings = $outingRepository->findByFilter($outingFilter);
 
-            return new Response($this->renderView('outing/list.html.twig', [
+            dump($outings);
+
+            return $this->render('outing/list.html.twig', [
                 'outings' => $outings,
                 'form' => $form,
-            ]), 201);
+            ]);
         }
 
         $outings = $outingRepository->findAll();

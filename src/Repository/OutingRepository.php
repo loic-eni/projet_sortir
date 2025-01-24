@@ -40,14 +40,16 @@ class OutingRepository extends ServiceEntityRepository
                 ->andWhere('o.startDate <= :endsBefore')
                 ->setParameter('endsBefore', $filter->getStartsBefore());
 
-        if($filter->isOutingPast())
-            $query
-                ->andWhere('o.startDate <= :now')
-                ->setParameter('now', new \DateTime());
-        else
-            $query
-                ->andWhere('o.startDate >= :now')
-                ->setParameter('now', new \DateTime());
+        if($filter->getStartsBefore() == null && $filter->getStartsAfter() == null) {
+            if ($filter->isOutingPast())
+                $query
+                    ->andWhere('o.startDate <= :now')
+                    ->setParameter('now', new \DateTime());
+            else
+                $query
+                    ->andWhere('o.startDate >= :now')
+                    ->setParameter('now', new \DateTime());
+        }
 
         if($filter->getUser() !== null){
             if($filter->isUserOrganizer())
