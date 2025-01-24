@@ -89,21 +89,28 @@
                             </td>
                             <td>{% if app.user and app.user.id in outing.participants|map(p => p.id) %}Oui{% else %}Non{% endif %}</td>
                             <td>{{ outing.organizer.email }}</td>
-                            <td>
+                            <td class="flex flex-col">
                                 <a href="{{ path('outing_details', {id: outing.id}) }}" class="link-primary">consulter</a>
+                                {% if app.user and app.user.id in outing.participants|map(p => p.id) %}
+                                    <a href="{{ path('outing_register_remove', {id: outing.id}) }}" class="link-primary">me désinscrire</a>
+                                {% else %}
+                                    <a href="{{ path('outing_register_new', {id: outing.id}) }}" class="link-primary">m'inscrire</a>
+                                {% endif %}
                             </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    {% endif %}
-
+    {% else %}
         <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-3/4 flex-center ">
             <p class="text-gray-400">
                 Aucun resultat \(o_o)/
             </p>
         </div>
+    {% endif %}
+
+
 
     </div>
 
