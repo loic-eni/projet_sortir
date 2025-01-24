@@ -93,7 +93,7 @@
                                 <a href="{{ path('outing_details', {id: outing.id}) }}" class="btn btn-xs btn-primary-light">consulter</a>
                                 {% if app.user and app.user.id in outing.participants|map(p => p.id) %}
                                     <a href="{{ path('outing_register_remove', {id: outing.id}) }}" class="btn btn-xs btn-error">me désinscrire</a>
-                                {% elseif outing.state.label == 'Ouverte' %}
+                                {% elseif outing.state.label == outingStates[1] %}
                                     <a href="{{ path('outing_register_new', {id: outing.id}) }}" class="btn btn-xs btn-primary">m'inscrire</a>
                                 {% endif %}
                             </td>

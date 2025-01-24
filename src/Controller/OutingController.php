@@ -45,6 +45,7 @@ final class OutingController extends BaseController
             return $this->render('outing/list.html.twig', [
                 'outings' => $outings,
                 'form' => $form,
+                'outingStates'=>$this::STATE
             ]);
         }
 
@@ -53,6 +54,7 @@ final class OutingController extends BaseController
         return $this->render('outing/list.html.twig', [
             'outings'=>$outings,
             'form' => $form,
+            'outingStates'=>$this::STATE
         ]);
     }
 
