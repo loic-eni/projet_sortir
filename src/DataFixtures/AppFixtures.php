@@ -9,12 +9,18 @@ use App\Factory\LocationFactory;
 use App\Factory\OutingFactory;
 use App\Factory\StateFactory;
 use App\Factory\UserFactory;
+use App\Service\CheckOutingStateService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
+
+    public function __construct(private readonly CheckOutingStateService $checkOutingStateService)
+    {
+    }
+
     /**
      * @throws \DateMalformedStringException
      */
@@ -84,5 +90,7 @@ class AppFixtures extends Fixture
                 'Outings' => OutingFactory::randomRange(0, 5),
             ];
         });
+
+        $this->checkOutingStateService->checkOutingState();
     }
 }
