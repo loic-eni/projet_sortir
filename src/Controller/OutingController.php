@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\OutingCancel;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
+use App\Repository\StateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +41,7 @@ final class OutingController extends BaseController
 
         if($outingForm->isSubmitted() && $outingForm->isValid()){
             $outing->setOrganizer($this->getUser());
+            $outing->setState($entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CREATED]));
 
             $entityManager->persist($outing);
             $entityManager->flush();
@@ -53,6 +55,21 @@ final class OutingController extends BaseController
             'outingForm' => $outingForm,
             ]
         );
+    }
+
+    #[Route('/{id}/publish', name: 'publish', methods: ['GET', 'POST'])]
+    public function publish(Outing $outing, StateRepository $stateRepository,  EntityManagerInterface $entityManager): Response
+    {
+        $currentUser = $this->getUser();
+
+        if ($currentUser !== $outing->getOrganizer()) {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
+        }
+
+        $outing->setState($stateRepository->findOneBy(['label' => State::STATE_OPENED ]));
+        $entityManager->flush();
+
+        return $this->redirectToRoute('outing_details', ['id' => $outing->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
