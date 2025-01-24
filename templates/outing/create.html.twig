@@ -3,19 +3,96 @@
 {% block title %}Préparer une sortie{% endblock %}
 
 {% block body %}
-    <h2>Préparer une sortie</h2>
-
+    <section class="container">
     {{ form_start(outingForm) }}
-        {{ form_row(outingForm.name) }}
-        {{ form_row(outingForm.startDate) }}
-        {{ form_row(outingForm.duration) }}
-        {{ form_row(outingForm.registrationMaxDate) }}
-        {{ form_row(outingForm.maxInscriptions) }}
-        {{ form_row(outingForm.outingInfo) }}
-        {{ form_row(outingForm.location) }}
-        <button type="button" ><a href={{ path('location_create') }}><strong>+</strong></a></button>
-        {{ form_row(outingForm.campus) }}
+        <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Préparer une sortie</h3>
+        <div class="flex justify-between w-100">
+        <div>
+        <label class="form-control w-full max-w-xs">
+            <div class="label">
+                <span class="label-text">Nom de la sortie</span>
+            </div>
+            <input name="{{ field_name(outingForm.name) }}"
+                   value="{{ field_value(outingForm.name) }}"
+                   type="text"
+                   placeholder="{{ field_label(outingForm.name) }}"
+                   class="input input-bordered w-full max-w-xs"/>
+        </label>
+        <label class="form-control w-full max-w-xs">
+            <div class="label">
+                <span class="label-text">Info. sur la sortie</span>
+            </div>
+            <textarea name="{{ field_name(outingForm.outingInfo) }}"
+                      placeholder="{{ field_label(outingForm.outingInfo) }}"
+                      class="textarea textarea-bordered h-24">{{ field_value(outingForm.outingInfo) }}</textarea>
+        </label>
+            <div class="flex items-end ">
+                <label class="form-control w-full max-w-xs">
+                    <div class="label">
+                        <span class="label-text">Lieu</span>
+                    </div>
+                    {{ form_widget(outingForm.location, { 'attr': { 'class': 'select select-bordered w-full max-w-xs' } }) }}
+                </label>
+                <button type="button" class="btn btn-primary ml-2">
+                    <a class="text-xs " href="{{ path('location_create') }}">
+                        <i class="fas fa-plus"></i> Ajouter un lieu
+                    </a>
+                </button>
+            </div>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                    <span class="label-text">Campus</span>
+                </div>
+                {{ form_widget(outingForm.campus, { 'attr': { 'class': 'select select-bordered w-full max-w-xs' } }) }}
+            </label>
+        </div>
+            <div class="divider lg:divider-horizontal"></div>
+            <div>
+        <label class="form-control w-full max-w-xs">
+            <div class="label">
+                <span class="label-text">Date de début</span>
+            </div>
+            <input name="{{ field_name(outingForm.startDate) }}"
+                   value="{{ field_value(outingForm.startDate) }}"
+                   type="datetime-local"
+                   placeholder="{{ field_label(outingForm.startDate) }}"
+                   class="input input-bordered w-full max-w-xs"/>
+        </label>
+        <label class="form-control w-full max-w-xs">
+            <div class="label">
+                <span class="label-text">Date max. d'inscription</span>
+            </div>
+            <input name="{{ field_name(outingForm.registrationMaxDate) }}"
+                   value="{{ field_value(outingForm.registrationMaxDate) }}"
+                   type="datetime-local"
+                   placeholder="{{ field_label(outingForm.registrationMaxDate) }}"
+                   class="input input-bordered w-full max-w-xs"/>
+        </label>
+        <label class="form-control w-full max-w-xs">
+            <div class="label">
+                <span class="label-text">Durée en min.</span>
+            </div>
+            <input name="{{ field_name(outingForm.duration) }}"
+                   value="{{ field_value(outingForm.duration) }}"
+                   type="number"
+                   placeholder="{{ field_label(outingForm.duration) }}"
+                   class="input input-bordered w-full max-w-xs"/>
+        </label>
+        <label class="form-control w-full max-w-xs">
+            <div class="label">
+                <span class="label-text">Nb. max d'inscription</span>
+            </div>
+            <input name="{{ field_name(outingForm.maxInscriptions) }}"
+                   value="{{ field_value(outingForm.maxInscriptions) }}"
+                   type="number"
+                   placeholder="{{ field_label(outingForm.maxInscriptions) }}"
+                   class="input input-bordered w-full max-w-xs"/>
+        </label>
 
-        <button type="submit">Créer une sortie</button>
+            <button type="submit" class="btn btn-primary my-2">Créer une sortie</button>
+
+        </div>
+    </div>
     {{ form_end(outingForm) }}
+    </section>
 {% endblock %}
