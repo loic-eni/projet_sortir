@@ -3,5 +3,115 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block body %}
-    <h2>Outing list</h2>
+
+    <div class="gap-20 flex-col">
+
+    {% if(is_granted('ROLE_USER')) %}
+    {{ form_start(form) }}
+        <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-3/4">
+            <div class="flex-row flex-center gap-20">
+                <div class="gap-10 flex-col">
+                    <div class="flex-center gap-10" >
+                        <label for="{{ field_name(form.campus) }}">Site: </label>
+                        <select id="{{ field_name(form.campus) }}" name="{{ field_name(form.campus) }}" class="select select-primary w-full max-w-xs">
+                            {% for label, value in field_choices(form.campus) %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <label for="nameSearch" class="input input-bordered input-primary flex items-center gap-2">
+                            Le nom de la sortie contient:
+                            <input type="text" id="{{ field_name(form.nameSearch) }}" name="{{ field_name(form.nameSearch) }}" value="{{ field_value(form.nameSearch) }}"/>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label for="{{ field_name(form.startsAfter) }}">Entre</label>
+                        <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}" value="{{ field_value(form.startsAfter) }}">
+                        <label for="{{ field_name(form.startsBefore) }}">et</label>
+                        <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}" value="{{ field_value(form.startsBefore) }}">
+                    </div>
+                </div>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="flex-col gap-10">
+                    <div class="flex-row flex-center gap-10">
+                        {{ form_widget(form.userOrganizer) }}
+                        {{ form_label(form.userOrganizer) }}
+                    </div>
+                    <div class="flex-row flex-center gap-10">
+                        {{ form_widget(form.userRegistered) }}
+                        {{ form_label(form.userRegistered) }}
+                    </div>
+                    <div class="flex-row flex-center gap-10">
+                        {{ form_widget(form.outingPast) }}
+                        {{ form_label(form.outingPast) }}
+                    </div>
+                </div>
+            </div>
+
+{#            <div class="divider"></div>#}
+
+            <input type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}" value="Rechercher" class="w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
+        </div>
+    {{ form_end(form) }}
+    {% endif %}
+
+    {% if outings|length > 0 %}
+    <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-3/4">
+        <table class="table overflow-x-auto max-h-200">
+            <thead>
+            <tr>
+                <td>nom</td>
+                <td>Date debut</td>
+                <td>Fin inscriptions</td>
+                <td>places restantes</td>
+                <td>Etat</td>
+                <td>Inscrit</td>
+                <td>Organisateur</td>
+                <td>Actions</td>
+            </tr>
+            </thead>
+            <tbody>
+                {% for outing in outings %}
+                    <tr>
+                            <td>{{ outing.name }}</td>
+                            <td>{{ outing.startDate|date('Y/m/d H\\hm') }}</td>
+                            <td>{{ outing.registrationMaxDate|date('Y/m/d H\\hm') }}</td>
+                            <td>{{ outing.maxInscriptions - outing.participants|length }} / {{ outing.maxInscriptions }}</td>
+                            <td>
+                                {% if outing.state != null %}
+                                    {{ outing.state.label }}
+                                {% endif %}
+                            </td>
+                            <td>{% if app.user and app.user.id in outing.participants|map(p => p.id) %}Oui{% else %}Non{% endif %}</td>
+                            <td>{{ outing.organizer.email }}</td>
+                            <td class="flex flex-col">
+                                <a href="{{ path('outing_details', {id: outing.id}) }}" class="link-primary">consulter</a>
+                                {% if app.user and app.user.id in outing.participants|map(p => p.id) %}
+                                    <a href="{{ path('outing_register_remove', {id: outing.id}) }}" class="link-primary">me désinscrire</a>
+                                {% else %}
+                                    <a href="{{ path('outing_register_new', {id: outing.id}) }}" class="link-primary">m'inscrire</a>
+                                {% endif %}
+                            </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-3/4 flex-center ">
+            <p class="text-gray-400">
+                Aucun resultat \(o_o)/
+            </p>
+        </div>
+    {% endif %}
+
+
+
+    </div>
+
 {% endblock %}
