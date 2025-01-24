@@ -15,7 +15,6 @@ class ChangePasswordType extends AbstractType
         $builder
             ->add('password', PasswordType::class, ['label' => 'Nouveau mot de passe'])
             ->add('password_confirmation', PasswordType::class, ['label' => 'Confirmation'])
-            ->add('save', SubmitType::class, ['label'=>'Enregistrer'])
         ;
     }
 
