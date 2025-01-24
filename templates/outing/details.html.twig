@@ -67,7 +67,11 @@
                             {% if (outing.state.label == state[1]) and outing.participants|length < outing.maxInscriptions %}
                                 <a href="{{ path('outing_register_new', {'id': outing.id}) }}" class="btn btn-primary w-100 my-1">S'inscrire à cette sortie</a>
                                 {% else %}
-                                <p class="text-orange-500">Vous ne pouvez pas vous inscrire, la sortie n'a pas été publiée</p>
+                                {% if (outing.participants|length < outing.maxInscriptions) %}
+                                    <p class="text-orange-500">Vous ne pouvez pas vous inscrire, la sortie n'a pas été publiée</p>
+                                {% else %}
+                                    <p class="text-orange-500">Vous ne pouvez pas vous inscrire, il n'y a plus de place libre pour cette sortie</p>
+                                {% endif %}
                             {% endif %}
                             {% else %}
                             <p class="badge badge-outline">Vous êtes l'organisateur</p>
