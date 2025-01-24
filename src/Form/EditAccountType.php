@@ -17,7 +17,6 @@ class EditAccountType extends AbstractType
             ->add('firstname', null ,['label'=>'Prénom'])
             ->add('lastname', null, ['label'=>'Nom'])
             ->add('phone', null, ['label'=>'Téléphone'])
-            ->add('save', SubmitType::class, ['label'=>'Enregistrer les changements'])
         ;
     }
 
