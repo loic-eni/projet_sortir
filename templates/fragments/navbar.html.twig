@@ -1,10 +1,12 @@
 {% block body %}
-    <div class="navbar bg-base-100 fixed top-0">
+    <nav class="flex justify-center">
+    <div class="navbar bg-base-100 fixed top-5 w-3/4 rounded shadow">
         <div class="flex-1">
             <a class="btn btn-ghost text-xl" href="{{ path("app_main") }}">Projet sortir</a>
         </div>
         {% if app.user %}
-        <div class="flex-none gap-2">
+            <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_create") }}">Créer une sortie</a>
+            <div class="flex-none gap-2">
             <div class="dropdown dropdown-end">
                 <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_create") }}">Créer une sortie</a>
                 <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_list") }}">Voir les sorties</a>
@@ -33,4 +35,5 @@
                 <a class="btn btn-active btn-primary" href="{{ path("app_login") }}">Me connecter</a>
         {% endif %}
     </div>
+    </nav>
 {% endblock %}

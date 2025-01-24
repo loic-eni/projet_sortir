@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une localisation{% endblock %}
+
+{% block body %}
+    <h2>Créer une localisation</h2>
+    {{ form_start(locationForm) }}
+    {{ form_row(locationForm.name) }}
+    {{ form_row(locationForm.street) }}
+    {{ form_row(locationForm.lat) }}
+    {{ form_row(locationForm.lng) }}
+    {{ form_row(locationForm.city) }}
+    <button type="submit">Enregistrer une localisation</button>
+    {{ form_end(locationForm) }}
+{% endblock %}

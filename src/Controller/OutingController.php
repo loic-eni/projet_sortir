@@ -85,23 +85,30 @@ final class OutingController extends BaseController
     }
 
     #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function details(int $id,
-                            Request $request,
-                           EntityManagerInterface $entityManager,
-                           OutingRepository $outingRepository
-    ): Response
-    {
+    public function details(
+        int $id,
+        OutingRepository $outingRepository
+    ): Response {
         $outing = $outingRepository->find($id);
+
+        $currentDate = new \DateTime();
+        $oneMonthAgo = $currentDate->modify('-1 month');
+
+        if ($outing && $outing->getStartDate() < $oneMonthAgo) {
+            $this->addFlash('error', 'Cette sortie ne peut plus être consultée car elle a eu lieu il y a plus d\'un mois.');
+
+            return $this->redirectToRoute('outing_list');
+        }
 
         $participants = $outing->getParticipants();
 
         return $this->render('outing/details.html.twig', [
-                'outing' => $outing,
-                'participants' => $participants,
-                'state' => self::STATE
-            ]
-        );
+            'outing' => $outing,
+            'participants' => $participants,
+            'state' => self::STATE
+        ]);
     }
+
 
     #[Route('/register/new/{id}', name: 'register_new', methods: ['GET', 'POST'])]
     public function new(EntityManagerInterface $entityManager, Outing $outing): Response
