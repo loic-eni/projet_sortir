@@ -41,7 +41,9 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/signup, roles: PUBLIC_ACCESS }
-        - { path: ^/outing/create, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/changePassword, roles: ROLE_USER }
+        - { path: ^/outing/(create|edit|publish|new|cancel|register/(new|remove)), roles: ROLE_USER }
         - { path: ^/outing, roles: PUBLIC_ACCESS }
 
     role_hierarchy:
