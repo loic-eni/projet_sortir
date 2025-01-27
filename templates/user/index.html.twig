@@ -20,7 +20,7 @@
     <section class="container">
         <div>
             <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Modifier mon compte</h3>
-            {{ form_start(editAccountForm) }}
+            {{ form_start(editAccountForm, {'attr': {'novalidate': 'novalidate'}}) }}
 
             <label class="form-control w-full max-w-xs">
                 <div class="label">
