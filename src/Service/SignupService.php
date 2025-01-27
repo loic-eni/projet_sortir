@@ -28,16 +28,22 @@ class SignupService
             $phone  = $line[4] ?? null;
 
             $user = new User();
-            $user->setEmail($email);
-            $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
-            $user->setFirstname($firstname);
-            $user->setLastname($lastname);
-            $user->setPhone($phone);
+            if($email !== null)
+                $user->setEmail($email);
+            if($password !== null)
+                $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+            if($firstname !== null)
+                $user->setFirstname($firstname);
+            if($lastname !== null)
+                $user->setLastname($lastname);
+            if($phone !== null)
+                $user->setPhone($phone);
+
             $user->setAdmin(false);
             $user->setRoles(['ROLE_USER']);
             $user->setActive(true);
 
-            if($this->validator->validate($user)){
+            if($this->validator->validate($user) && $email !== null && $password !== null && $firstname !== null && $lastname !== null && $phone !== null){
                 $createdAccounts[] = $user;
                 $this->entityManager->persist($user);
             }else{

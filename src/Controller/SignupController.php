@@ -68,7 +68,7 @@ final class SignupController extends AbstractController
                     if(count($createdAccounts) > 0)
                         $this->addFlash('success', 'Comptes créés pour: ' . implode(', ', array_map(function($account){return $account->getEmail();}, $createdAccounts)));
                     if(count($invalidLines) > 0)
-                        $this->addFlash('error', 'Création de compte impossible pour les lignes: ' . implode(', ', $invalidLines) . '.\\nLignes invalides.');
+                        $this->addFlash('error', 'Création de compte impossible pour les lignes: ' . implode(', ', $invalidLines));
                 }
 
             }
