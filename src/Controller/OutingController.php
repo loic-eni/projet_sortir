@@ -90,7 +90,8 @@ final class OutingController extends BaseController
         );
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
     public function edit(Request $request, Outing $outing, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
@@ -120,7 +121,8 @@ final class OutingController extends BaseController
         ]);
     }
 
-    #[Route('/{id}/publish', name: 'publish', methods: ['GET', 'POST'])]
+    #[Route('/publish/{id}', name: 'publish', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
     public function publish(Outing $outing, StateRepository $stateRepository,  EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
@@ -162,6 +164,7 @@ final class OutingController extends BaseController
 
 
     #[Route('/register/new/{id}', name: 'register_new', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
     public function new(EntityManagerInterface $entityManager, Outing $outing): Response
     {
         if (!$this->getUser()) {
@@ -196,6 +199,7 @@ final class OutingController extends BaseController
 
 
     #[Route('/register/remove/{id}', name: 'register_remove', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
     public function remove(EntityManagerInterface $entityManager, Outing $outing): Response
     {
         if (!$this->getUser()) {
@@ -223,7 +227,8 @@ final class OutingController extends BaseController
         return $this->redirectToRoute('outing_details', ['id' => $outing->getId()]);
     }
 
-    #[Route('/{id}/cancel', name: 'cancel', methods: ['GET', 'POST'])]
+    #[Route('/cancel/{id}', name: 'cancel', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
     public function cancel(Request $request, Outing $outing, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
