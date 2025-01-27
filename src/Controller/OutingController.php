@@ -12,6 +12,7 @@ use App\Repository\CampusRepository;
 use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
+use App\Service\CheckOutingStateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class OutingController extends BaseController
 {
     #[Route('/list', name: 'list')]
-    public function list(OutingRepository $outingRepository,UserRepository $userRepository, Request $request): Response
+    public function list(OutingRepository $outingRepository, UserRepository $userRepository, Request $request, CheckOutingStateService $checkOutingStateService): Response
     {
         $user = $this->getUser();
         if($user)
@@ -48,6 +49,8 @@ final class OutingController extends BaseController
                 'outingStates'=>$this::STATE
             ]);
         }
+
+        $checkOutingStateService->updateState();
 
         $outings = $outingRepository->findAll();
 

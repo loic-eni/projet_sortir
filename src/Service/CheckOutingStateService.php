@@ -42,20 +42,31 @@ class CheckOutingStateService
         $today = new \DateTime();
         $allOutings = $this->entityManager->getRepository(Outing::class)->findAll();
 
-
         foreach ($allOutings as $outing) {
             $startDate = $outing->getStartDate();
             $endDate = clone $startDate;
             $endDate->modify('+' . $outing->getDuration() . ' minutes');
 
-            if ($endDate < $today) {
-                $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_PASSED]));
-            } elseif ($startDate === $today) {
+            $isExpired = $endDate < (new \DateTime())->modify('-1 month');
+
+            if ($isExpired) {
+                $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_ARCHIVED]));
+            }
+            elseif ($startDate->format('Y-m-d H:i') === $today->format('Y-m-d H:i')) {
                 $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_ACTIVITY_IN_PROGRESS]));
-            } elseif ($outing->getMaxInscriptions() === count($outing->getParticipants()->toArray()) && $outing->getState()->getLabel() === State::STATE_OPENED) {
+            }
+            elseif ($outing->getMaxInscriptions() === count($outing->getParticipants()->toArray()) && $outing->getState()->getLabel() === State::STATE_OPENED) {
                 $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CLOSED]));
             }
+            elseif ($endDate < $today) {
+                $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_PASSED]));
+            }
+
+            $this->entityManager->persist($outing);
         }
+
         $this->entityManager->flush();
     }
+
+
 }
