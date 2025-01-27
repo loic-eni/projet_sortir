@@ -9,7 +9,7 @@ use App\Factory\LocationFactory;
 use App\Factory\OutingFactory;
 use App\Factory\StateFactory;
 use App\Factory\UserFactory;
-use App\Service\CheckOutingStateService;
+use App\Service\OutingService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -17,7 +17,7 @@ use Faker\Factory;
 class AppFixtures extends Fixture
 {
 
-    public function __construct(private readonly CheckOutingStateService $checkOutingStateService)
+    public function __construct(private readonly OutingService $checkOutingStateService)
     {
     }
 
@@ -91,6 +91,6 @@ class AppFixtures extends Fixture
             ];
         });
 
-        $this->checkOutingStateService->checkOutingState();
+        $this->checkOutingStateService->autoUpdateOutingStates();
     }
 }
