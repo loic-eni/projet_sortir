@@ -51,7 +51,7 @@ readonly class OutingService
         return null;
     }
 
-    public function setOutingState(Outing $outing, string $stateLabel, bool $persist = false): null{
+    public function setOutingState(Outing $outing, string $stateLabel, bool $persist = true): null{
         $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => $stateLabel]));
         if($persist){
             $this->entityManager->persist($outing);
