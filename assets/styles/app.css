@@ -95,3 +95,7 @@ body {
     display: flex;
     gap: 20px !important;
 }
+
+label ul li {
+    color: red;
+}
