@@ -32,8 +32,7 @@ final class UserController extends AbstractController
         }
 
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-            'editAccountForm' => $form->createView(),
+            'editAccountForm' => $form,
         ]);
     }
 
@@ -46,10 +45,6 @@ final class UserController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $password = $data['password'];
-            $passwordConfirmation = $data['password_confirmation'];
-
-            if($password !== $passwordConfirmation)
-                return $this->render('user/changePassword.html.twig', ['changePasswordForm' => $form->createView(), 'errors'=>['Password does not match password confirmation']]);
 
             $user = $this->getUser();
             $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
@@ -62,7 +57,7 @@ final class UserController extends AbstractController
             return $this->redirectToRoute('app_main');
         }
 
-        return $this->render('user/changePassword.html.twig', ['changePasswordForm' => $form->createView()]);
+        return $this->render('user/changePassword.html.twig', ['changePasswordForm' => $form]);
     }
 
     #[Route('/profile/user/{id}', name: 'app_show_profile', methods: ['GET'])]

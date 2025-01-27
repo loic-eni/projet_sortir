@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: OutingRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'Il existe déja une sortie du même nom')]
 class Outing
 {
     #[ORM\Id]

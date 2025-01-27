@@ -15,6 +15,7 @@
                type="text"
                placeholder="{{ field_label(locationForm.name) }}"
                class="input input-bordered w-full max-w-xs"/>
+        {{ form_errors(locationForm.name) }}
     </label>
     <label class="form-control w-full max-w-xs">
         <div class="label">
@@ -25,6 +26,7 @@
                type="text"
                placeholder="{{ field_label(locationForm.street) }}"
                class="input input-bordered w-full max-w-xs"/>
+        {{ form_errors(locationForm.street) }}
     </label>
     <label class="form-control w-full max-w-xs">
         <div class="label">
@@ -35,6 +37,7 @@
                type="text"
                placeholder="{{ field_label(locationForm.lat) }}"
                class="input input-bordered w-full max-w-xs"/>
+        {{ form_errors(locationForm.lat) }}
     </label>
     <label class="form-control w-full max-w-xs">
         <div class="label">
@@ -45,12 +48,14 @@
                type="text"
                placeholder="{{ field_label(locationForm.lng) }}"
                class="input input-bordered w-full max-w-xs"/>
+        {{ form_errors(locationForm.lng) }}
     </label>
     <label class="form-control w-full max-w-xs">
         <div class="label">
             <span class="label-text">Lieu</span>
         </div>
         {{ form_widget(locationForm.city, { 'attr': { 'class': 'select select-bordered w-full max-w-xs' } }) }}
+        {{ form_errors(locationForm.city) }}
     </label>
     <div class="flex justify-center">
         <button type="submit" class="btn btn-primary my-2">Enregistrer une localisation</button>
