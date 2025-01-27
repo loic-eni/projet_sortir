@@ -32,7 +32,7 @@ final class LocationController extends AbstractController
             return $this->redirectToRoute('outing_create');
         }
 
-        return $this->render('location/_form.html.twig', [
+        return $this->render('location/create.html.twig', [
             'locationForm' => $locationForm
         ]);
     }
