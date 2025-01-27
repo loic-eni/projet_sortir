@@ -61,14 +61,15 @@
     {% endif %}
 
     {% if outings|length > 0 %}
-    <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-3/4">
+    <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-5/6">
         <table class="table overflow-x-auto max-h-200">
             <thead>
             <tr>
-                <td>nom</td>
+                <td>Nom</td>
+                <td>Site</td>
                 <td>Date debut</td>
                 <td>Fin inscriptions</td>
-                <td>places restantes</td>
+                <td>Places restantes</td>
                 <td>Etat</td>
                 <td>Inscrit</td>
                 <td>Organisateur</td>
@@ -79,6 +80,7 @@
                 {% for outing in outings %}
                     <tr>
                             <td>{{ outing.name }}</td>
+                            <td>{{ outing.campus.name }}</td>
                             <td>{{ outing.startDate|date('Y/m/d H\\hm') }}</td>
                             <td>{{ outing.registrationMaxDate|date('Y/m/d H\\hm') }}</td>
                             <td>{{ outing.maxInscriptions - outing.participants|length }} / {{ outing.maxInscriptions }}</td>
