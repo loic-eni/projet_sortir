@@ -84,10 +84,17 @@
                             <td>{{ outing.maxInscriptions - outing.participants|length }} / {{ outing.maxInscriptions }}</td>
                             <td>
                                 {% if outing.state != null %}
-                                    {{ outing.state.label }}
+                                    <div class="badge">
+                                        {{ outing.state.label }}
+                                    </div>
                                 {% endif %}
                             </td>
-                            <td>{% if app.user and app.user.id in outing.participants|map(p => p.id) %}Oui{% else %}Non{% endif %}</td>
+                            <td>{% if app.user and app.user.id in outing.participants|map(p => p.id) %}
+                                    <div class="badge badge-success">Oui</div>
+                                {% else %}
+                                    <div class="badge badge-warning">Non</div>
+                                {% endif %}
+                            </td>
                             <td>{{ outing.organizer.email }}</td>
                             <td class="flex flex-col gap-10">
                                 <a href="{{ path('outing_details', {id: outing.id}) }}" class="btn btn-xs btn-primary-light">consulter</a>
