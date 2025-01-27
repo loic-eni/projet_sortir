@@ -17,7 +17,7 @@ use Faker\Factory;
 class AppFixtures extends Fixture
 {
 
-    public function __construct(private readonly OutingService $checkOutingStateService)
+    public function __construct(private readonly OutingService $outingService)
     {
     }
 
@@ -91,6 +91,6 @@ class AppFixtures extends Fixture
             ];
         });
 
-        $this->checkOutingStateService->autoUpdateOutingStates();
+        $this->outingService->autoUpdateOutingStates();
     }
 }

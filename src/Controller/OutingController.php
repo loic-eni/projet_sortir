@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class OutingController extends BaseController
 {
     #[Route('/list', name: 'list')]
-    public function list(OutingRepository $outingRepository, UserRepository $userRepository, Request $request, OutingService $checkOutingStateService): Response
+    public function list(OutingRepository $outingRepository, UserRepository $userRepository, Request $request, OutingService $outingService): Response
     {
         $user = $this->getUser();
         if($user)
@@ -33,7 +33,7 @@ final class OutingController extends BaseController
         $form = $this->createForm(OutingFilterType::class);
         $form->handleRequest($request);
 
-        $checkOutingStateService->autoUpdateOutingStates();
+        $outingService->autoUpdateOutingStates();
 
         if($form->isSubmitted() && $form->isValid() && $user != null){
             $outingFilter = $form->getData();
