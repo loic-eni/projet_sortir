@@ -62,11 +62,11 @@
                     <strong>Latitude :</strong> {{ outing.location.lat }}
                 </div>
                 <div class="my-2">
-                    {% set isAlreadyRegistered = outing.participants|filter(user => user.id == app.user.id) %}
-                    {% if isAlreadyRegistered|length > 0 %}
+                    {% set isAlreadyRegistered = app.user and outing.participants|filter(user => user.id == app.user.id)|length > 0 %}
+                    {% if isAlreadyRegistered %}
                         <a href="{{ path('outing_register_remove', {'id': outing.id}) }}" class="btn btn-warning w-100 my-1">Se désinscrire de cette sortie</a>
                     {% else %}
-                        {% if outing.organizer.id != app.user.id %}
+                        {% if app.user == null or outing.organizer.id != app.user.id %}
                             {% if (outing.state.label == state[1]) and outing.participants|length < outing.maxInscriptions %}
                                 <a href="{{ path('outing_register_new', {'id': outing.id}) }}" class="btn btn-primary w-100 my-1">S'inscrire à cette sortie</a>
                                 {% else %}
@@ -89,7 +89,7 @@
                     {% endif %}
                 </div>
                 <div class="d-flex align-items-center">
-                    {% if outing.organizer.id == app.user.id %}
+                    {% if app.user and outing.organizer.id == app.user.id %}
                         {% if outing.state.label == state[5] %}
                             <p class="badge badge-error">Sortie annulée</p>
                             <p>Motif de l'annulation: {{ outing.reason }}</p>
