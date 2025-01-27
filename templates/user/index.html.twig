@@ -26,41 +26,29 @@
                 <div class="label">
                     <span class="label-text">Prénom</span>
                 </div>
-                <input name="{{ field_name(editAccountForm.firstname) }}"
-                       value="{{ field_value(editAccountForm.firstname) }}"
-                       type="text"
-                       placeholder="{{ field_label(editAccountForm.firstname) }}"
-                       class="input input-bordered w-full max-w-xs"/>
+                {{ form_widget(editAccountForm.firstname) }}
+                {{ form_errors(editAccountForm.firstname) }}
             </label>
             <label class="form-control w-full max-w-xs">
                 <div class="label">
                     <span class="label-text">Nom</span>
                 </div>
-                <input name="{{ field_name(editAccountForm.lastname) }}"
-                       value="{{ field_value(editAccountForm.lastname) }}"
-                       type="text"
-                       placeholder="{{ field_label(editAccountForm.lastname) }}"
-                       class="input input-bordered w-full max-w-xs"/>
+                {{ form_widget(editAccountForm.lastname) }}
+                {{ form_errors(editAccountForm.lastname) }}
             </label>
             <label class="form-control w-full max-w-xs">
                 <div class="label">
                     <span class="label-text">Email</span>
                 </div>
-                <input name="{{ field_name(editAccountForm.email) }}"
-                       value="{{ field_value(editAccountForm.email) }}"
-                       type="text"
-                       placeholder="{{ field_label(editAccountForm.email) }}"
-                       class="input input-bordered w-full max-w-xs"/>
+                {{ form_widget(editAccountForm.email) }}
+                {{ form_errors(editAccountForm.email) }}
             </label>
             <label class="form-control w-full max-w-xs">
                 <div class="label">
                     <span class="label-text">Téléphone</span>
                 </div>
-                <input name="{{ field_name(editAccountForm.phone) }}"
-                       value="{{ field_value(editAccountForm.phone) }}"
-                       type="text"
-                       placeholder="{{ field_label(editAccountForm.phone) }}"
-                       class="input input-bordered w-full max-w-xs"/>
+                {{ form_widget(editAccountForm.phone) }}
+                {{ form_errors(editAccountForm.phone) }}
             </label>
             <div class="flex justify-center">
                 <button type="submit" class="btn btn-primary my-2">Enregistrer</button>
