@@ -61,9 +61,9 @@
     {% endif %}
 
     {% if outings|length > 0 %}
-    <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-5/6">
+    <div class="p-6 bg-white mx-auto rounded-xl shadow-xl gap-20 flex-col w-5/6 pt-0 max-h-[70vh] overflow-y-scroll">
         <table class="table overflow-x-auto max-h-200">
-            <thead>
+            <thead class="sticky top-0 bg-white">
             <tr>
                 <td>Nom</td>
                 <td>Site</td>
