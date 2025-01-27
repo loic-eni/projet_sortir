@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\File;
 
 class EditAccountType extends AbstractType
 {
@@ -60,6 +62,23 @@ class EditAccountType extends AbstractType
                         'minMessage' => 'Le nom doit au moins faire 2 caractères',
                         'max' => 255,
                         'maxMessage' => 'Le nom doit faire moins de 255 caractères',
+                    ])
+                ]
+            ])
+            ->add('imgPath', FileType::class, [
+                'label' => 'Image PNG/JPEG : ',
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['class' => 'file-input w-full max-w-xs my-2'],
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1000k',
+                        'mimeTypes' => [
+                            'image/*',
+                            'application/pdf',
+                            'application/x-pdf',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid PNG/JPEG image',
                     ])
                 ]
             ])
