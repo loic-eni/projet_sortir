@@ -21,11 +21,13 @@
         <div>
             <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Modifier mon compte</h3>
             {{ form_start(editAccountForm) }}
-            <div class="flex justify-around w-50">
-                <div class="w-2/4">
-                    <img src="{{ asset('uploads/profile_image/' ~ app.user.imgPath ) }}" alt="Image profile">
+            <div class="">
+                {% if app.user.imgPath != null %}
+                <div class="w-40">
+                    <img   src="{{ asset('uploads/profile_image/' ~ app.user.imgPath ) }}" alt="Image profile">
                 </div>
-                <div class="w-1/4">
+                {% endif %}
+                <div>
                     <label class="form-control w-full max-w-xs">
                         <div class="label">
                             <span class="label-text">Prénom</span>
