@@ -66,6 +66,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Outing::class, mappedBy: 'organizer')]
     private Collection $outings;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imgPath = null;
+
     public function __construct()
     {
         $this->outing = new ArrayCollection();
@@ -249,5 +252,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getOutings(): Collection
     {
         return $this->outings;
+    }
+
+    public function getImgPath(): ?string
+    {
+        return $this->imgPath;
+    }
+
+    public function setImgPath(?string $imgPath): static
+    {
+        $this->imgPath = $imgPath;
+
+        return $this;
     }
 }
