@@ -42,12 +42,12 @@ final class OutingFactory extends PersistentProxyObjectFactory
         $state = self::faker()->optional(0.7, StateFactory::find(['label' => State::STATE_CANCELED]))->passthrough($defaultState);
 
         return [
-            'name' => self::faker()->text(50),
+            'name' => self::faker()->text(20),
             'startDate' => $startDate,
             'duration' => self::faker()->numberBetween(30, 700),
             'registrationMaxDate' => $registrationMaxDate,
             'maxInscriptions' => self::faker()->numberBetween(2, 50),
-            'outingInfo' => self::faker()->text(255),
+            'outingInfo' => self::faker()->text(100),
             'state' => $state,
             'location' => LocationFactory::random(),
             'campus' => CampusFactory::random(),

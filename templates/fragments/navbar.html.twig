@@ -1,12 +1,14 @@
 {% block body %}
-    <div class="navbar bg-base-100">
+    <nav class="flex justify-center">
+    <div class="flex items-center p-2 bg-base-100 fixed top-0 w-3/4 rounded shadow z-10">
         <div class="flex-1">
             <a class="btn btn-ghost text-xl" href="{{ path("app_main") }}">Projet sortir</a>
         </div>
         {% if app.user %}
-        <div class="flex-none gap-2">
-            <div class="dropdown dropdown-end">
-                <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_create") }}">Créer une sortie</a>
+            <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_create") }}">Créer une sortie</a>
+            <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_list") }}">Voir les sorties</a>
+            <div class="flex-none gap-2">
+                <div class="dropdown dropdown-end">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                     <div class="w-10 rounded-full">
                         <img
@@ -32,4 +34,5 @@
                 <a class="btn btn-active btn-primary" href="{{ path("app_login") }}">Me connecter</a>
         {% endif %}
     </div>
+    </nav>
 {% endblock %}

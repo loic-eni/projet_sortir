@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: OutingRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'Il existe déja une sortie du même nom')]
 class Outing
 {
     #[ORM\Id]
@@ -51,6 +53,9 @@ class Outing
 
     #[ORM\ManyToOne(inversedBy: 'outings')]
     private ?user $organizer = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reason = null;
 
     public function __construct()
     {
@@ -205,6 +210,18 @@ class Outing
     public function setOrganizer(?user $organizer): static
     {
         $this->organizer = $organizer;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(?string $reason): static
+    {
+        $this->reason = $reason;
 
         return $this;
     }

@@ -1,6 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: skyblue;
 }
 
 .toast-top {
@@ -53,4 +52,44 @@ body {
     display: flex;
     flex-direction: row;
     gap: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.columns {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.detailsField {
+    flex: 1 1 45%;
+    text-align: left;
+}
+
+.formField {
+    border: 1px solid black;
+}
+
+.flex-center{
+    display: flex;
+    align-items: center;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.gap-10{
+    display: flex;
+    gap: 10px !important;
+}
+
+.gap-20{
+    display: flex;
+    gap: 20px !important;
 }
