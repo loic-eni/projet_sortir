@@ -65,7 +65,6 @@ final class OutingController extends BaseController
     #[IsGranted("ROLE_USER")]
     public function create(Request $request,
                            EntityManagerInterface $entityManager,
-                           OutingRepository $outingRepository
     ): Response
     {
         $outing = new Outing();
@@ -85,10 +84,40 @@ final class OutingController extends BaseController
             return $this->redirectToRoute('outing_list');
         }
 
-        return $this->render('outing/create.html.twig', [
+        return $this->render('outing/_form.html.twig', [
             'outingForm' => $outingForm,
             ]
         );
+    }
+
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Outing $outing, EntityManagerInterface $entityManager): Response
+    {
+        $currentUser = $this->getUser();
+
+        if ($currentUser !== $outing->getOrganizer()) {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
+        }
+
+        if ($outing->getState()->getLabel() !== State::STATE_CREATED) {
+            $this->addFlash('error', 'Vous ne pouvez pas modifier une sortie dont le statut n\'est pas "Créé".');
+            return $this->redirectToRoute('outing_list');
+        }
+
+        $form = $this->createForm(OutingType::class, $outing);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'La sortie ' . $outing->getName() . ' a bien été edité.');
+
+            return $this->redirectToRoute('outing_list', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('outing/edit.html.twig', [
+            'outing' => $outing,
+            'outingForm' => $form,
+        ]);
     }
 
     #[Route('/{id}/publish', name: 'publish', methods: ['GET', 'POST'])]
