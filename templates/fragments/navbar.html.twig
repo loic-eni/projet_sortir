@@ -7,6 +7,9 @@
         {% if app.user %}
             <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_create") }}">Créer une sortie</a>
             <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_list") }}">Voir les sorties</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a class="btn btn-outline btn-primary mx-2" href="{{ path("app_signup_with_csv") }}">Importer utilisateurs via CSV</a>
+            {% endif %}
             <div class="flex-none gap-2">
                 <div class="dropdown dropdown-end">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
