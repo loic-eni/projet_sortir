@@ -16,6 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class SignupController extends AbstractController
 {
     #[Route('/signup', name: 'app_signup')]
+    #[IsGranted("ROLE_ADMIN")]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         $form = $this->createForm(SignupType::class);
