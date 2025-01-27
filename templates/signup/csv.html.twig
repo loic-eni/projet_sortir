@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Importer des utilisateurs via CSV{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        <div class="p-8 bg-white mx-auto rounded-2xl w-[50%] mt-48 shadow-xl flex-col gap-10 items-center max-w-[600px]">
+            <h1 class="font-semibold text-2xl text-gray-800 text-center">Importer des comptes utilisateurs via CSV</h1>
+            <div class="size-fit">
+                <label for="{{ field_name(form.csv) }}">{{ field_label(form.csv) }}</label>
+                <input type="file" class="file-input w-full max-w-xs" id="{{ field_name(form.csv) }}" name="{{ field_name(form.csv) }}"/>
+            </div>
+            <div class="w-full">
+                <button class="w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500" type="submit" id="{{ field_name(form.submit) }}" name="{{ field_name(form.submit) }}">{{ field_label(form.submit) }}</button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
