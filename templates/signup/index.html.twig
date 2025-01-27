@@ -13,7 +13,6 @@
                 </div>
 
                 {{ form_start(signupForm) }}
-                {{ form_errors(signupForm) }}
 
                 <div class="flex">
                     <div class="m-2">
@@ -26,6 +25,7 @@
                                    type="text"
                                    placeholder="{{ field_label(signupForm.firstname) }}"
                                    class="input input-bordered w-full max-w-xs"/>
+                            {{ form_errors(signupForm.firstname) }}
                         </label>
 
                         <label class="form-control w-full max-w-xs">
@@ -37,6 +37,7 @@
                                    type="text"
                                    placeholder="{{ field_label(signupForm.lastname) }}"
                                    class="input input-bordered w-full max-w-xs"/>
+                            {{ form_errors(signupForm.lastname) }}
                         </label>
 
                         <label class="form-control w-full max-w-xs">
@@ -48,6 +49,7 @@
                                    type="text"
                                    placeholder="{{ field_label(signupForm.phone) }}"
                                    class="input input-bordered w-full max-w-xs"/>
+                            {{ form_errors(signupForm.phone) }}
                         </label>
                     </div>
                     <div class="m-2">
@@ -60,6 +62,7 @@
                                    type="text"
                                    placeholder="{{ field_label(signupForm.email) }}"
                                    class="input input-bordered w-full max-w-xs"/>
+                            {{ form_errors(signupForm.email) }}
                         </label>
 
                         <label class="form-control w-full max-w-xs">
@@ -71,6 +74,7 @@
                                    type="password"
                                    placeholder="{{ field_label(signupForm.password.first) }}"
                                    class="input input-bordered w-full max-w-xs"/>
+                            {{ form_errors(signupForm.password.first) }}
                         </label>
                         <label class="form-control w-full max-w-xs">
                             <div class="label">
