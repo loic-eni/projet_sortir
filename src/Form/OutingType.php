@@ -7,6 +7,7 @@ use App\Entity\Location;
 use App\Entity\Outing;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,14 +31,14 @@ class OutingType extends AbstractType
                         'message' => 'Veuillez saisir un nom'
                     ]),
                     new Length([
-                        'min' => 5,
-                        'minMessage' => 'Le nom doit faire minimum 5 caractères',
+                        'min' => 3,
+                        'minMessage' => 'Le nom doit faire minimum 3 caractères',
                         'max' => 255,
                         'maxMessage' => 'Le nom ne peut pas dépasser 255 caractères'
                     ]),
                 ]
             ])
-            ->add('startDate', null, [
+            ->add('startDate', DateTimeType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date de début: ',
                 'attr' => ['class' => 'formField'],
@@ -75,7 +76,7 @@ class OutingType extends AbstractType
                     ])
                 ]
             ])
-            ->add('registrationMaxDate', null, [
+            ->add('registrationMaxDate', DateTimeType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date d\'inscription: ',
                 'attr' => ['class' => 'formField'],

@@ -84,7 +84,7 @@ class Outing
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): static
+    public function setStartDate(?\DateTimeInterface $startDate): static
     {
         $this->startDate = $startDate;
 
@@ -108,7 +108,7 @@ class Outing
         return $this->registrationMaxDate;
     }
 
-    public function setRegistrationMaxDate(\DateTimeInterface $registrationMaxDate): static
+    public function setRegistrationMaxDate(?\DateTimeInterface $registrationMaxDate): static
     {
         $this->registrationMaxDate = $registrationMaxDate;
 

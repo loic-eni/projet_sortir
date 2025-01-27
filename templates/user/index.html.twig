@@ -20,13 +20,24 @@
     <section class="container">
         <div>
             <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Modifier mon compte</h3>
-            {{ form_start(editAccountForm) }}
+            {{ form_start(editAccountForm, {'attr': {'novalidate': 'novalidate'}}) }}
             <div class="">
                 {% if app.user.imgPath != null %}
                 <div class="w-40">
                     <img   src="{{ asset('uploads/profile_image/' ~ app.user.imgPath ) }}" alt="Image profile">
-                </div>
+                   </div>
                 {% endif %}
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                    <span class="label-text">Prénom</span>
+                </div>
+                {{ form_widget(editAccountForm.firstname) }}
+                {{ form_errors(editAccountForm.firstname) }}
+            </label>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                    <span class="label-text">Nom</span>
+                    </div>
                 <div>
                     <label class="form-control w-full max-w-xs">
                         <div class="label">

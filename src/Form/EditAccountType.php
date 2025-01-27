@@ -23,6 +23,7 @@ class EditAccountType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'attr' => ['class' => 'input input-bordered w-full max-w-xs'],
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez saisir un email',
@@ -35,6 +36,7 @@ class EditAccountType extends AbstractType
             ->add('firstname', TextType::class ,[
                 'label'=>'Prénom',
                 'attr' => ['class' => 'input input-bordered w-full max-w-xs'],
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez saisir un prénom',
@@ -50,6 +52,7 @@ class EditAccountType extends AbstractType
             ->add('lastname', TextType::class, [
                 'label'=>'Nom',
                 'attr' => ['class' => 'input input-bordered w-full max-w-xs'],
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez saisir un nom',
@@ -82,6 +85,7 @@ class EditAccountType extends AbstractType
             ->add('phone', TextType::class, [
                 'label'=>'Téléphone',
                 'attr' => ['class' => 'input input-bordered w-full max-w-xs'],
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez saisir un numero de téléphone',
