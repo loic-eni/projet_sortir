@@ -10,6 +10,7 @@
                     <h1 class="text-center">Sortie : {{ outing.name }}</h1>
                 </div>
                 <div class="card-body">
+                    {{ form_errors(form_cancel.reason) }}
                     {{ include('outing/_form_cancel.html.twig', {'button_label': 'Annuler la sortie'}) }}
                 </div>
             </div>
