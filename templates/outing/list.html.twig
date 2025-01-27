@@ -86,7 +86,7 @@
                             <td>{{ outing.maxInscriptions - outing.participants|length }} / {{ outing.maxInscriptions }}</td>
                             <td>
                                 {% if outing.state != null %}
-                                    <div class="badge">
+                                    <div class="badge badge-{{ outing.state.label in [outingStates[0], outingStates[1]] ? 'success' : outing.state.label in [outingStates[2], outingStates[3]] ? 'warning' :  outing.state.label == outingStates[6] ? 'else' : 'error'}}">
                                         {{ outing.state.label }}
                                     </div>
                                 {% endif %}
