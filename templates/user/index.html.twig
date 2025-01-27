@@ -3,30 +3,30 @@
 {% block title %}Modifier mon compte{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-        }
+<style>
+    .example-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+    }
 
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-    </style>
+    .example-wrapper code {
+        background: #F5F5F5;
+        padding: 2px 6px;
+    }
+</style>
 
-    <section class="container">
+<div class="container">
+    <div>
+        <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Modifier mon compte</h3>
+        {{ form_start(editAccountForm, {'attr': {'novalidate': 'novalidate'}}) }}
+        {% if app.user.imgPath != null %}
+            <div class="w-40">
+                <img src="{{ asset('uploads/profile_image/' ~ app.user.imgPath ) }}" alt="Image profile"/>
+            </div>
+        {% endif %}
         <div>
-            <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Modifier mon compte</h3>
-            {{ form_start(editAccountForm, {'attr': {'novalidate': 'novalidate'}}) }}
-            <div class="">
-                {% if app.user.imgPath != null %}
-                <div class="w-40">
-                    <img   src="{{ asset('uploads/profile_image/' ~ app.user.imgPath ) }}" alt="Image profile">
-                   </div>
-                {% endif %}
             <label class="form-control w-full max-w-xs">
                 <div class="label">
                     <span class="label-text">Prénom</span>
@@ -37,52 +37,38 @@
             <label class="form-control w-full max-w-xs">
                 <div class="label">
                     <span class="label-text">Nom</span>
-                    </div>
-                <div>
-                    <label class="form-control w-full max-w-xs">
-                        <div class="label">
-                            <span class="label-text">Prénom</span>
-                        </div>
-                        {{ form_widget(editAccountForm.firstname) }}
-                        {{ form_errors(editAccountForm.firstname) }}
-                    </label>
-                    <label class="form-control w-full max-w-xs">
-                        <div class="label">
-                            <span class="label-text">Nom</span>
-                        </div>
-                        {{ form_widget(editAccountForm.lastname) }}
-                        {{ form_errors(editAccountForm.lastname) }}
-                    </label>
-                    <label class="form-control w-full max-w-xs">
-                        <div class="label">
-                            <span class="label-text">Email</span>
-                        </div>
-                        {{ form_widget(editAccountForm.email) }}
-                        {{ form_errors(editAccountForm.email) }}
-                    </label>
-                    <label class="form-control w-full max-w-xs">
-                        <div class="label">
-                            <span class="label-text">Téléphone</span>
-                        </div>
-                        {{ form_widget(editAccountForm.phone) }}
-                        {{ form_errors(editAccountForm.phone) }}
-                    </label>
-
-
-                    {{ form_widget(editAccountForm.imgPath) }}
-
-
-                    <div class="flex justify-center">
-                        <button type="submit" class="btn btn-primary my-2">Enregistrer</button>
-                    </div>
                 </div>
-            </div>
-            {{ form_end(editAccountForm) }}
-            <div class="divider"></div>
+                {{ form_widget(editAccountForm.lastname) }}
+                {{ form_errors(editAccountForm.lastname) }}
+            </label>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                    <span class="label-text">Email</span>
+                </div>
+                {{ form_widget(editAccountForm.email) }}
+                {{ form_errors(editAccountForm.email) }}
+            </label>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                    <span class="label-text">Téléphone</span>
+                </div>
+                {{ form_widget(editAccountForm.phone) }}
+                {{ form_errors(editAccountForm.phone) }}
+            </label>
+
+
+            {{ form_widget(editAccountForm.imgPath) }}
+
 
             <div class="flex justify-center">
-                <a href="{{ path('app_changePassword') }}" class="btn btn-primary my-2">Changer mon mot de passe</a>
+                <button type="submit" class="btn btn-primary my-2">Enregistrer</button>
             </div>
         </div>
-    </section>
-{% endblock %}
+        {{ form_end(editAccountForm) }}
+        <div class="divider"></div>
+
+        <div class="flex justify-center">
+            <a href="{{ path('app_changePassword') }}" class="btn btn-primary my-2">Changer mon mot de passe</a>
+        </div>
+    </div>
+    {% endblock %}
