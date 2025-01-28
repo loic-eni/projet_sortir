@@ -31,5 +31,7 @@ class Redirection
         return $this;
     }
 
-
+    public function toArray(): array{
+        return ['url' => $this->url, 'label' => $this->label];
+    }
 }
