@@ -1,0 +1,14 @@
+{% block body %}
+    {% if redirection is defined and redirection != null and redirection.getURL() != null %}
+        <div class="flex justify-center">
+            <div class="w-3/4 bg-white p-2">
+                <a href="{{ redirection.getURL() }}" class="btn btn-primary btn-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="white"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+                    {{ redirection.getLabel()|default(redirection.getURL()) }}
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="h-[14px]"></div>
+    {% endif %}
+{% endblock %}

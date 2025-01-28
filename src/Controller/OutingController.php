@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\Redirection;
 use App\Entity\Outing;
 use App\Entity\State;
 use App\Entity\User;
@@ -137,8 +138,11 @@ final class OutingController extends BaseController
     #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function details(
         int $id,
-        OutingRepository $outingRepository
+        OutingRepository $outingRepository,
+        ?Redirection $redirection
     ): Response {
+        dump($redirection);
+
         $outing = $outingRepository->find($id);
 
         $currentDate = new \DateTime();
@@ -155,14 +159,15 @@ final class OutingController extends BaseController
         return $this->render('outing/details.html.twig', [
             'outing' => $outing,
             'participants' => $participants,
-            'state' => self::STATE
+            'state' => self::STATE,
+            'redirection' => $redirection
         ]);
     }
 
 
     #[Route('/register/new/{id}', name: 'register_new', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function new(EntityManagerInterface $entityManager, Outing $outing): Response
+    public function new(EntityManagerInterface $entityManager, Outing $outing, ?Redirection $redirection): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -173,7 +178,7 @@ final class OutingController extends BaseController
 
         if ($outing->getParticipants()->contains($user)) {
             $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
-            return $this->redirectToRoute('outing_details', ['id' => $outing->getId()]);
+            return $this->redirectToRoute('outing_details', ['id' => $outing->getId(), 'redirection'=>$redirection->toArray()]);
         }
 
         $status = $outing->getState()->getLabel();
@@ -181,7 +186,7 @@ final class OutingController extends BaseController
             count($outing->getParticipants()) >= $outing->getMaxInscriptions() ||
             $outing->getRegistrationMaxDate() < new \DateTime()) {
             $this->addFlash('warning', 'Impossible de vous inscrire à cette sortie (soit le statut n\'est pas "Ouverte", soit le nombre d\'inscriptions est atteint ou soit date limite d\'inscription est dépassé)');
-            return $this->redirectToRoute('outing_details', ['id' => $outing->getId()]);
+            return $this->redirectToRoute('outing_details', ['id' => $outing->getId(), 'redirection'=>$redirection->toArray()]);
         }
 
         $outing->addParticipant($user);
@@ -190,14 +195,14 @@ final class OutingController extends BaseController
         $this->addFlash('success', 'Vous avez été inscrit à la sortie.');
 
 
-        return $this->redirectToRoute('outing_details', ['id' => $outing->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('outing_details', ['id' => $outing->getId(), 'redirection'=>$redirection->toArray()], Response::HTTP_SEE_OTHER);
     }
 
 
 
     #[Route('/register/remove/{id}', name: 'register_remove', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function remove(EntityManagerInterface $entityManager, Outing $outing): Response
+    public function remove(EntityManagerInterface $entityManager, Outing $outing, ?Redirection $redirection): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -221,7 +226,7 @@ final class OutingController extends BaseController
             $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cette sortie.');
         }
 
-        return $this->redirectToRoute('outing_details', ['id' => $outing->getId()]);
+        return $this->redirectToRoute('outing_details', ['id' => $outing->getId(), 'redirection'=>$redirection->toArray()]);
     }
 
     #[Route('/cancel/{id}', name: 'cancel', methods: ['GET', 'POST'])]
