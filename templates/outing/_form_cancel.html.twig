@@ -1,14 +1,19 @@
 {{ form_start(form_cancel) }}
-<label class="form-control w-full max-w-xs">
-    <div class="label">
-        <span class="label-text">Raison de l'annulation :</span>
-    </div>
+<div class="mb-4">
+    <label for="{{ field_name(form_cancel.reason) }}" class="block text-gray-700 font-medium">
+        Raison de l'annulation :
+    </label>
     <textarea name="{{ field_name(form_cancel.reason) }}"
+              id="{{ field_name(form_cancel.reason) }}"
               placeholder="{{ field_label(form_cancel.reason) }}"
-              class="textarea textarea-bordered h-24">{{ field_value(form_cancel.reason) }}</textarea>
-</label>
-<div class="flex justify-center">
-<button class="btn btn-error w-100 my-2">{{ button_label|default('Cancel') }}</button>
+              class="textarea textarea-bordered w-full h-24 mt-2 p-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+    >{{ field_value(form_cancel.reason) }}</textarea>
+    {{ form_errors(form_cancel.reason) }}
 </div>
 
+<div class="flex justify-center mt-4">
+    <button type="submit" class="btn btn-error w-full sm:w-auto px-6 py-2 text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+        {{ button_label|default('Cancel') }}
+    </button>
+</div>
 {{ form_end(form_cancel) }}

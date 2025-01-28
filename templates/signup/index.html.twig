@@ -1,97 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SignupController!{% endblock %}
+{% block title %}Créer un compte utilisateur{% endblock %}
 
 {% block body %}
-
-    <div>
-        <div class="flex justify-center items-center self-center  z-10 h-dvh">
-            <div class="p-12 bg-white mx-auto rounded-2xl w-100 shadow-xl">
-
-                <div class="mb-4">
-                    <h3 class="font-semibold text-2xl text-gray-800">Créer un compte utilisateur </h3>
-                </div>
-
-                {{ form_start(signupForm) }}
-
-                <div class="flex">
-                    <div class="m-2">
-                        <label class="form-control w-full max-w-xs">
-                            <div class="label">
-                                <span class="label-text">Prénom</span>
-                            </div>
-                            <input name="{{ field_name(signupForm.firstname) }}"
-                                   value="{{ field_value(signupForm.firstname) }}"
-                                   type="text"
-                                   placeholder="{{ field_label(signupForm.firstname) }}"
-                                   class="input input-bordered w-full max-w-xs"/>
-                            {{ form_errors(signupForm.firstname) }}
-                        </label>
-
-                        <label class="form-control w-full max-w-xs">
-                            <div class="label">
-                                <span class="label-text">Nom</span>
-                            </div>
-                            <input name="{{ field_name(signupForm.lastname) }}"
-                                   value="{{ field_value(signupForm.lastname) }}"
-                                   type="text"
-                                   placeholder="{{ field_label(signupForm.lastname) }}"
-                                   class="input input-bordered w-full max-w-xs"/>
-                            {{ form_errors(signupForm.lastname) }}
-                        </label>
-
-                        <label class="form-control w-full max-w-xs">
-                            <div class="label">
-                                <span class="label-text">Téléphone</span>
-                            </div>
-                            <input name="{{ field_name(signupForm.phone) }}"
-                                   value="{{ field_value(signupForm.phone) }}"
-                                   type="text"
-                                   placeholder="{{ field_label(signupForm.phone) }}"
-                                   class="input input-bordered w-full max-w-xs"/>
-                            {{ form_errors(signupForm.phone) }}
-                        </label>
-                    </div>
-                    <div class="m-2">
-                        <label class="form-control w-full max-w-xs">
-                            <div class="label">
-                                <span class="label-text">Email</span>
-                            </div>
-                            <input name="{{ field_name(signupForm.email) }}"
-                                   value="{{ field_value(signupForm.email) }}"
-                                   type="text"
-                                   placeholder="{{ field_label(signupForm.email) }}"
-                                   class="input input-bordered w-full max-w-xs"/>
-                            {{ form_errors(signupForm.email) }}
-                        </label>
-
-                        <label class="form-control w-full max-w-xs">
-                            <div class="label">
-                                <span class="label-text">Password</span>
-                            </div>
-                            <input name="{{ field_name(signupForm.password.first) }}"
-                                   value="{{ field_value(signupForm.password.first) }}"
-                                   type="password"
-                                   placeholder="{{ field_label(signupForm.password.first) }}"
-                                   class="input input-bordered w-full max-w-xs"/>
-                            {{ form_errors(signupForm.password.first) }}
-                        </label>
-                        <label class="form-control w-full max-w-xs">
-                            <div class="label">
-                                <span class="label-text">Confirmer le mot de passe</span>
-                            </div>
-                            <input name="{{ field_name(signupForm.password.second) }}"
-                                   value="{{ field_value(signupForm.password.second) }}"
-                                   type="password"
-                                   placeholder="{{ field_label(signupForm.password.second) }}"
-                                   class="input input-bordered w-full max-w-xs"/>
-                        </label>
-
-                        {{ form_row(signupForm.save,{ 'attr' : { 'class': 'w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500 my-2' } }) }}
-                    </div>
-                </div>
-                {{ form_end(signupForm) }}
+    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+        <div class="p-8 bg-white rounded-xl w-full max-w-lg shadow-xl">
+            <div class="mb-6 text-center">
+                <h3 class="font-semibold text-2xl text-gray-800">Créer un compte utilisateur</h3>
             </div>
+
+            {{ form_start(signupForm) }}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col space-y-4">
+                    <div>
+                        <label for="{{ field_name(signupForm.firstname) }}" class="label text-sm font-medium text-gray-700">Prénom</label>
+                        <input name="{{ field_name(signupForm.firstname) }}"
+                               value="{{ field_value(signupForm.firstname) }}"
+                               type="text"
+                               placeholder="{{ field_label(signupForm.firstname) }}"
+                               class="input input-bordered w-full max-w-xs mt-2 p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        {{ form_errors(signupForm.firstname) }}
+                    </div>
+
+                    <div>
+                        <label for="{{ field_name(signupForm.lastname) }}" class="label text-sm font-medium text-gray-700">Nom</label>
+                        <input name="{{ field_name(signupForm.lastname) }}"
+                               value="{{ field_value(signupForm.lastname) }}"
+                               type="text"
+                               placeholder="{{ field_label(signupForm.lastname) }}"
+                               class="input input-bordered w-full max-w-xs mt-2 p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        {{ form_errors(signupForm.lastname) }}
+                    </div>
+
+                    <div>
+                        <label for="{{ field_name(signupForm.phone) }}" class="label text-sm font-medium text-gray-700">Téléphone</label>
+                        <input name="{{ field_name(signupForm.phone) }}"
+                               value="{{ field_value(signupForm.phone) }}"
+                               type="text"
+                               placeholder="{{ field_label(signupForm.phone) }}"
+                               class="input input-bordered w-full max-w-xs mt-2 p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        {{ form_errors(signupForm.phone) }}
+                    </div>
+                </div>
+
+                <div class="flex flex-col space-y-4">
+                    <div>
+                        <label for="{{ field_name(signupForm.email) }}" class="label text-sm font-medium text-gray-700">Email</label>
+                        <input name="{{ field_name(signupForm.email) }}"
+                               value="{{ field_value(signupForm.email) }}"
+                               type="text"
+                               placeholder="{{ field_label(signupForm.email) }}"
+                               class="input input-bordered w-full max-w-xs mt-2 p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        {{ form_errors(signupForm.email) }}
+                    </div>
+
+                    <div>
+                        <label for="{{ field_name(signupForm.password.first) }}" class="label text-sm font-medium text-gray-700">Mot de passe</label>
+                        <input name="{{ field_name(signupForm.password.first) }}"
+                               value="{{ field_value(signupForm.password.first) }}"
+                               type="password"
+                               placeholder="{{ field_label(signupForm.password.first) }}"
+                               class="input input-bordered w-full max-w-xs mt-2 p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        {{ form_errors(signupForm.password.first) }}
+                    </div>
+
+                    <div>
+                        <label for="{{ field_name(signupForm.password.second) }}" class="label text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
+                        <input name="{{ field_name(signupForm.password.second) }}"
+                               value="{{ field_value(signupForm.password.second) }}"
+                               type="password"
+                               placeholder="{{ field_label(signupForm.password.second) }}"
+                               class="input input-bordered w-full max-w-xs mt-2 p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                {{ form_row(signupForm.save, { 'attr' : { 'class': 'btn btn-active btn-primary w-full p-3 rounded-full text-white shadow-lg hover:bg-white hover:text-gray-500 transition ease-in duration-500' } }) }}
+            </div>
+
+            {{ form_end(signupForm) }}
         </div>
     </div>
 {% endblock %}

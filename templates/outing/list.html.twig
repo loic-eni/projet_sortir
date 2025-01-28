@@ -6,96 +6,95 @@
 
     <div class="gap-20 flex-col">
 
-    {% if(is_granted('ROLE_USER')) %}
-    {{ form_start(form) }}
-        <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-3/4">
-            {% if filterEmpty == false %}
-                <a href="{{ path('outing_list') }}" class="link-primary">Réinitialiser les filtres</a>
-            {% endif %}
-            <div class="flex-row flex-center space-between">
-                <div class="gap-10 flex-col">
-                    <div class="flex-center gap-10" >
-                        {{ form_label(form.campus) }}
-                        {{ form_widget(form.campus) }}
+        {% if(is_granted('ROLE_USER')) %}
+            {{ form_start(form) }}
+            <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-full sm:w-3/4">
+                {% if filterEmpty == false %}
+                    <a href="{{ path('outing_list') }}" class="link-primary">Réinitialiser les filtres</a>
+                {% endif %}
+                <div class="flex flex-col sm:flex-row justify-between gap-10">
+                    <div class="flex-col gap-10 sm:w-1/2">
+                        <div class="flex gap-10 sm:flex-row items-center">
+                            {{ form_label(form.campus) }}
+                            {{ form_widget(form.campus) }}
+                        </div>
+
+                        <div class="row">
+                            <label for="nameSearch" class="input input-bordered input-sm input-primary flex items-center gap-2">
+                                Le nom de la sortie contient:
+                                <input type="text" id="{{ field_name(form.nameSearch) }}" name="{{ field_name(form.nameSearch) }}" value="{{ field_value(form.nameSearch) }}"/>
+                            </label>
+                        </div>
+
+                        <div class="row">
+                            <label for="{{ field_name(form.startsAfter) }}">Entre</label>
+                            <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}" value="{{ field_value(form.startsAfter) }}">
+                            <label for="{{ field_name(form.startsBefore) }}">et</label>
+                            <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}" value="{{ field_value(form.startsBefore) }}">
+                        </div>
                     </div>
 
-                    <div class="row">
-                        <label for="nameSearch" class="input input-bordered input-sm input-primary flex items-center gap-2">
-                            Le nom de la sortie contient:
-                            <input type="text" id="{{ field_name(form.nameSearch) }}" name="{{ field_name(form.nameSearch) }}" value="{{ field_value(form.nameSearch) }}"/>
-                        </label>
-                    </div>
+                    <div class="divider divider-horizontal sm:hidden"></div>
 
-                    <div class="row">
-                        <label for="{{ field_name(form.startsAfter) }}">Entre</label>
-                        <input type="datetime-local" id="{{ field_name(form.startsAfter) }}" name="{{ field_name(form.startsAfter) }}" value="{{ field_value(form.startsAfter) }}">
-                        <label for="{{ field_name(form.startsBefore) }}">et</label>
-                        <input type="datetime-local" id="{{ field_name(form.startsBefore) }}" name="{{ field_name(form.startsBefore) }}" value="{{ field_value(form.startsBefore) }}">
+                    <div class="flex-col gap-10 sm:w-1/2">
+                        <div class="flex gap-10 sm:flex-row items-center">
+                            {{ form_label(form.userOrganizer) }}
+                            {{ form_widget(form.userOrganizer) }}
+                        </div>
+                        <div class="flex gap-10 sm:flex-row items-center">
+                            {{ form_label(form.userRegistered) }}
+                            {{ form_widget(form.userRegistered) }}
+                        </div>
+                        <div class="flex gap-10 sm:flex-row items-center">
+                            {{ form_label(form.outingPast) }}
+                            {{ form_widget(form.outingPast) }}
+                        </div>
                     </div>
                 </div>
 
-                <div class="divider divider-horizontal"></div>
-
-                <div class="flex-col gap-10">
-                    <div class="flex-center gap-10" >
-                        {{ form_label(form.userOrganizer) }}
-                        {{ form_widget(form.userOrganizer) }}
-                    </div>
-                    <div class="flex-center gap-10" >
-                        {{ form_label(form.userRegistered) }}
-                        {{ form_widget(form.userRegistered) }}
-                    </div>
-                    <div class="flex-center gap-10" >
-                        {{ form_label(form.outingPast) }}
-                        {{ form_widget(form.outingPast) }}
-                    </div>
-                </div>
+                <input type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}" value="Rechercher" class="w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500">
             </div>
+            {{ form_end(form) }}
+        {% endif %}
 
-            <input type="submit" id="{{ field_name(form.find) }}" name="{{ field_name(form.find) }}" value="Rechercher" class="w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
-        </div>
-    {{ form_end(form) }}
-    {% endif %}
-
-    {% if outings|length > 0 %}
-    <div class="p-6 bg-white mx-auto rounded-xl shadow-xl gap-20 flex-col w-5/6 pt-0 max-h-[70vh] overflow-y-scroll">
-        <table class="table overflow-x-auto max-h-200">
-            <thead class="sticky top-0 bg-white">
-            <tr>
-                <td>Nom</td>
-                <td>Site</td>
-                <td>Date debut</td>
-                <td>Fin inscriptions</td>
-                <td>Places restantes</td>
-                <td>Etat</td>
-                <td>Inscrit</td>
-                <td>Organisateur</td>
-                <td>Actions</td>
-            </tr>
-            </thead>
-            <tbody>
-                {% for outing in outings %}
+        {% if outings|length > 0 %}
+            <div class="p-6 bg-white mx-auto rounded-xl shadow-xl gap-20 flex-col w-full sm:w-5/6 pt-0 max-h-[70vh] overflow-y-scroll">
+                <table class="table overflow-x-auto max-h-200">
+                    <thead class="sticky top-0 bg-white">
                     <tr>
-                            <td>{{ outing.name }}</td>
-                            <td>{{ outing.campus.name }}</td>
-                            <td>{{ outing.startDate|date('Y/m/d H\\hm') }}</td>
-                            <td>{{ outing.registrationMaxDate|date('Y/m/d H\\hm') }}</td>
-                            <td>{{ outing.maxInscriptions - outing.participants|length }} / {{ outing.maxInscriptions }}</td>
-                            <td>
+                        <td class="p-2">Nom</td>
+                        <td class="p-2">Site</td>
+                        <td class="p-2">Date debut</td>
+                        <td class="p-2">Fin inscriptions</td>
+                        <td class="p-2">Places restantes</td>
+                        <td class="p-2">Etat</td>
+                        <td class="p-2">Inscrit</td>
+                        <td class="p-2">Organisateur</td>
+                        <td class="p-2">Actions</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for outing in outings %}
+                        <tr>
+                            <td class="p-2">{{ outing.name }}</td>
+                            <td class="p-2">{{ outing.campus.name }}</td>
+                            <td class="p-2">{{ outing.startDate|date('Y/m/d H\\hm') }}</td>
+                            <td class="p-2">{{ outing.registrationMaxDate|date('Y/m/d H\\hm') }}</td>
+                            <td class="p-2">{{ outing.maxInscriptions - outing.participants|length }} / {{ outing.maxInscriptions }}</td>
+                            <td class="p-2">
                                 {% if outing.state != null %}
                                     <div class="badge badge-{{ outing.state.label in [outingStates[0], outingStates[1]] ? 'success' : outing.state.label in [outingStates[2], outingStates[3]] ? 'warning' :  outing.state.label == outingStates[6] ? 'outline' : 'error'}}">
                                         {{ outing.state.label }}
                                     </div>
                                 {% endif %}
                             </td>
-                            <td>{% if app.user and app.user.id in outing.participants|map(p => p.id) %}
+                            <td class="p-2">{% if app.user and app.user.id in outing.participants|map(p => p.id) %}
                                     <div class="badge badge-success">Oui</div>
                                 {% else %}
                                     <div class="badge badge-warning">Non</div>
-                                {% endif %}
-                            </td>
-                            <td>{{ outing.organizer.email }}</td>
-                            <td class="flex flex-col gap-10">
+                                {% endif %}</td>
+                            <td class="p-2">{{ outing.organizer.email }}</td>
+                            <td class="flex flex-col gap-2">
                                 <a href="{{ path('outing_details', {id: outing.id}) }}" class="btn btn-xs btn-primary-light">consulter</a>
                                 {% if app.user and app.user.id in outing.participants|map(p => p.id) %}
                                     <a href="{{ path('outing_register_remove', {id: outing.id}) }}" class="btn btn-xs btn-error">me désinscrire</a>
@@ -103,18 +102,18 @@
                                     <a href="{{ path('outing_register_new', {id: outing.id}) }}" class="btn btn-xs btn-primary">m'inscrire</a>
                                 {% endif %}
                             </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-        <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-3/4 flex-center ">
-            <p class="text-gray-400">
-                Aucun resultat \(o_o)/
-            </p>
-        </div>
-    {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-full sm:w-3/4 flex-center ">
+                <p class="text-gray-400">
+                    Aucun resultat \(o_o)/
+                </p>
+            </div>
+        {% endif %}
 
     </div>
 
