@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Form\OutingCancel;
 use App\Form\OutingFilterType;
 use App\Form\OutingType;
-use App\Repository\CampusRepository;
 use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
@@ -231,7 +230,7 @@ final class OutingController extends BaseController
     {
         $currentUser = $this->getUser();
 
-        if ($currentUser !== $outing->getOrganizer()) {
+        if ($currentUser !== $outing->getOrganizer() && !$currentUser->isAdmin()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
         }
 
