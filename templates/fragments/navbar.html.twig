@@ -4,7 +4,7 @@
         <div class="flex-1">
             <a class="btn btn-ghost text-xl" href="{{ path("app_main") }}">Projet sortir</a>
         </div>
-        {% if app.user and app.user.active %}
+        {% if app.user %}
             <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_create") }}">Créer une sortie</a>
             <a class="btn btn-outline btn-primary mx-2" href="{{ path("outing_list") }}">Voir les sorties</a>
             {% if is_granted('ROLE_ADMIN') %}

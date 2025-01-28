@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Controller\Exceptions\AccessDeniedException;
+use App\Controller\Exceptions\DeactivatedAccountException;
 use App\DTO\Redirection;
 use App\Entity\Outing;
 use App\Entity\State;
@@ -13,8 +15,8 @@ use App\Repository\OutingRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use App\Service\OutingService;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -61,10 +63,11 @@ final class OutingController extends BaseController
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function create(Request $request,
-                           EntityManagerInterface $entityManager,
-    ): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, UserService $userService): Response
     {
+        if(!$userService->isUserActive($this->getUser()->getId()))
+            throw new DeactivatedAccountException();
+
         $outing = new Outing();
 
         $outingForm = $this->createForm(OutingType::class, $outing);
@@ -90,13 +93,15 @@ final class OutingController extends BaseController
 
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function edit(Request $request, Outing $outing, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Outing $outing, EntityManagerInterface $entityManager, UserService $userService): Response
     {
         $currentUser = $this->getUser();
-
-        if ($currentUser !== $outing->getOrganizer()) {
+        if ($currentUser !== $outing->getOrganizer())
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
-        }
+
+
+        if(!$userService->isUserActive($this->getUser()->getId()))
+            throw new DeactivatedAccountException();
 
         if ($outing->getState()->getLabel() !== State::STATE_CREATED) {
             $this->addFlash('error', 'Vous ne pouvez pas modifier une sortie dont le statut n\'est pas "Créé".');
@@ -121,13 +126,14 @@ final class OutingController extends BaseController
 
     #[Route('/publish/{id}', name: 'publish', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function publish(Outing $outing, StateRepository $stateRepository,  EntityManagerInterface $entityManager): Response
+    public function publish(Outing $outing, StateRepository $stateRepository, EntityManagerInterface $entityManager, UserService $userService): Response
     {
         $currentUser = $this->getUser();
-
-        if ($currentUser !== $outing->getOrganizer()) {
+        if ($currentUser !== $outing->getOrganizer())
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
-        }
+
+        if(!$userService->isUserActive($this->getUser()->getId()))
+            throw new DeactivatedAccountException();
 
         $outing->setState($stateRepository->findOneBy(['label' => State::STATE_OPENED ]));
         $entityManager->flush();
@@ -141,8 +147,6 @@ final class OutingController extends BaseController
         OutingRepository $outingRepository,
         ?Redirection $redirection
     ): Response {
-        dump($redirection);
-
         $outing = $outingRepository->find($id);
 
         $currentDate = new \DateTime();
@@ -167,11 +171,14 @@ final class OutingController extends BaseController
 
     #[Route('/register/new/{id}', name: 'register_new', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function new(EntityManagerInterface $entityManager, Outing $outing, ?Redirection $redirection): Response
+    public function new(EntityManagerInterface $entityManager, Outing $outing, UserService $userService, ?Redirection $redirection): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+
+        if(!$userService->isUserActive($this->getUser()->getId()))
+            throw new DeactivatedAccountException();
 
         /** @var User $user */
         $user = $this->getUser();
@@ -202,11 +209,14 @@ final class OutingController extends BaseController
 
     #[Route('/register/remove/{id}', name: 'register_remove', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function remove(EntityManagerInterface $entityManager, Outing $outing, ?Redirection $redirection): Response
+    public function remove(EntityManagerInterface $entityManager, Outing $outing, UserService $userService, ?Redirection $redirection): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+
+        if(!$userService->isUserActive($this->getUser()->getId()))
+            throw new DeactivatedAccountException();
 
         /** @var User $user */
         $user = $this->getUser();
