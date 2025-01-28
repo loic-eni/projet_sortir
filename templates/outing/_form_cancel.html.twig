@@ -1,14 +1,32 @@
 {{ form_start(form_cancel) }}
-<label class="form-control w-full max-w-xs">
-    <div class="label">
-        <span class="label-text">Raison de l'annulation :</span>
+<div class="card-body">
+        <p class="card-text">
+            <strong>Nom de la sortie: </strong>
+            {{ outing.name }}
+        </p>
+        <p class="card-text">
+            <strong>Date de la sortie: </strong>
+            {{ outing.startDate | date('d/m/Y H:i', 'Europe/Paris') }}
+        </p>
+        <p class="card-text">
+            <strong>Site organisateur: </strong>
+            {{ outing.campus.name }}
+        </p>
+        <p class="card-text">
+            <strong>Lieu: </strong>
+            {{ outing.location.city.name }}
+        </p>
+        <div class="label">
+            <span class="label-text">Raison de l'annulation :</span>
+        </div>
+        <label class="form-control w-full max-w-xs">
+        <textarea name="{{ field_name(form_cancel.reason) }}"
+                placeholder="{{ field_label(form_cancel.reason) }}"
+                class="textarea textarea-bordered h-24">{{ field_value(form_cancel.reason) }}</textarea>
+        </label>
+    <div class="flex justify-center">
+        <button class="btn btn-error w-100 my-2">{{ button_label|default('Cancel') }}</button>
     </div>
-    <textarea name="{{ field_name(form_cancel.reason) }}"
-              placeholder="{{ field_label(form_cancel.reason) }}"
-              class="textarea textarea-bordered h-24">{{ field_value(form_cancel.reason) }}</textarea>
-</label>
-<div class="flex justify-center">
-<button class="btn btn-error w-100 my-2">{{ button_label|default('Cancel') }}</button>
 </div>
 
 {{ form_end(form_cancel) }}
