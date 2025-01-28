@@ -99,11 +99,11 @@
                             </td>
                             <td>{{ outing.organizer.email }}</td>
                             <td class="flex flex-col gap-10">
-                                <a href="{{ path('outing_details', {id: outing.id}) }}" class="btn btn-xs btn-primary-light">consulter</a>
+                                <a href="{{ path('outing_details', {id: outing.id, redirection: {url: path('outing_list'), label:'Retour aux sorties'} }) }}" class="btn btn-xs btn-primary-light">consulter</a>
                                 {% if app.user and app.user.id in outing.participants|map(p => p.id) %}
-                                    <a href="{{ path('outing_register_remove', {id: outing.id}) }}" class="btn btn-xs btn-error">me désinscrire</a>
+                                    <a href="{{ path('outing_register_remove', {id: outing.id, redirection: {url: path('outing_list'), label: 'Retour aux sorties' } }) }}" class="btn btn-xs btn-error">me désinscrire</a>
                                 {% elseif outing.state.label == outingStates[1] %}
-                                    <a href="{{ path('outing_register_new', {id: outing.id}) }}" class="btn btn-xs btn-primary">m'inscrire</a>
+                                    <a href="{{ path('outing_register_new', {id: outing.id, redirection: {url: path('outing_list'), label: 'Retour aux sorties' } }) }}" class="btn btn-xs btn-primary">m'inscrire</a>
                                 {% endif %}
                             </td>
                     </tr>
