@@ -45,7 +45,7 @@ class OutingRepository extends ServiceEntityRepository
                 $query
                     ->andWhere('o.startDate <= :now')
                     ->setParameter('now', new \DateTime());
-            else
+            if($filter->isOutingPast() === false)
                 $query
                     ->andWhere('o.startDate >= :now')
                     ->setParameter('now', new \DateTime());
@@ -53,17 +53,17 @@ class OutingRepository extends ServiceEntityRepository
 
         if($filter->getUser() !== null){
             if($filter->isUserOrganizer())
-                $query->andWhere('o.organizer = :organizer');
-            else
-                $query->andWhere('o.organizer != :organizer');
-
-            $query->setParameter('organizer', $filter->getUser());
+                $query->andWhere('o.organizer = :organizer')
+                      ->setParameter('organizer', $filter->getUser());
+            if($filter->isUserOrganizer() === false)
+                $query->andWhere('o.organizer != :organizer')
+                      ->setParameter('organizer', $filter->getUser());
 
             if($filter->isUserRegistered())
                 $query
                     ->andWhere(':user MEMBER OF o.participants')
                     ->setParameter('user', $filter->getUser());
-            else
+            if($filter->isUserRegistered() === false)
                 $query
                     ->andWhere(':user NOT MEMBER OF o.participants')
                     ->setParameter('user', $filter->getUser());

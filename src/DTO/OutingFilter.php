@@ -13,9 +13,9 @@ class OutingFilter
     private ?\DateTime $startsAfter = null;
     private ?\DateTime $startsBefore = null;
     private ?User $user = null;
-    private bool $userOrganizer = false;
-    private bool $userRegistered = false;
-    private bool $outingPast = false;
+    private ?bool $userOrganizer = null;
+    private ?bool $userRegistered = null;
+    private ?bool $outingPast = null;
 
     public function __construct(){}
 
@@ -75,7 +75,7 @@ class OutingFilter
         $this->user = $user;
     }
 
-    public function isUserOrganizer(): bool
+    public function isUserOrganizer(): bool | null
     {
         return $this->userOrganizer;
     }
@@ -85,7 +85,7 @@ class OutingFilter
         $this->userOrganizer = $userOrganizer;
     }
 
-    public function isUserRegistered(): bool
+    public function isUserRegistered(): bool | null
     {
         return $this->userRegistered;
     }
@@ -95,7 +95,7 @@ class OutingFilter
         $this->userRegistered = $userRegistered;
     }
 
-    public function isOutingPast(): bool
+    public function isOutingPast(): bool | null
     {
         return $this->outingPast;
     }
@@ -103,6 +103,10 @@ class OutingFilter
     public function setOutingPast(bool $outingPast): void
     {
         $this->outingPast = $outingPast;
+    }
+
+    public function isFilterEmpty(){
+        return $this->user ===  null && $this->campus === null && $this->userOrganizer === null && $this->outingPast === null && $this->startsBefore === null && $this->startsAfter === null && $this->nameSearch === null;
     }
 
 }

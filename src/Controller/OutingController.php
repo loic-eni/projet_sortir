@@ -39,15 +39,12 @@ final class OutingController extends BaseController
             $outingFilter = $form->getData();
             $outingFilter->setUser($user);
 
-            dump($outingFilter);
-
             $outings = $outingRepository->findByFilter($outingFilter);
-
-            dump($outings);
 
             return $this->render('outing/list.html.twig', [
                 'outings' => $outings,
                 'form' => $form,
+                'filterEmpty'=>$outingFilter->isFilterEmpty(),
                 'outingStates'=>$this::STATE
             ]);
         }
@@ -57,6 +54,7 @@ final class OutingController extends BaseController
         return $this->render('outing/list.html.twig', [
             'outings'=>$outings,
             'form' => $form,
+            'filterEmpty'=>true,
             'outingStates'=>$this::STATE
         ]);
     }
