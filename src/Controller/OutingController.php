@@ -44,6 +44,7 @@ final class OutingController extends BaseController
             return $this->render('outing/list.html.twig', [
                 'outings' => $outings,
                 'form' => $form,
+                'filterEmpty'=>$outingFilter->isFilterEmpty(),
                 'outingStates'=>$this::STATE
             ]);
         }
@@ -53,6 +54,7 @@ final class OutingController extends BaseController
         return $this->render('outing/list.html.twig', [
             'outings'=>$outings,
             'form' => $form,
+            'filterEmpty'=>true,
             'outingStates'=>$this::STATE
         ]);
     }
@@ -233,7 +235,7 @@ final class OutingController extends BaseController
     {
         $currentUser = $this->getUser();
 
-        if ($currentUser !== $outing->getOrganizer()) {
+        if ($currentUser !== $outing->getOrganizer() && !$currentUser->isAdmin()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
         }
 
