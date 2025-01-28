@@ -57,9 +57,19 @@ class Outing
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reason = null;
 
+    #[ORM\Column]
+    private ?bool $private = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    private Collection $whiteListedUsers;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->whiteListedUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,6 +232,42 @@ class Outing
     public function setReason(?string $reason): static
     {
         $this->reason = $reason;
+
+        return $this;
+    }
+
+    public function isPrivate(): ?bool
+    {
+        return $this->private;
+    }
+
+    public function setPrivate(bool $private): static
+    {
+        $this->private = $private;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getWhiteListedUsers(): Collection
+    {
+        return $this->whiteListedUsers;
+    }
+
+    public function addWhiteListedUser(User $whiteListedUser): static
+    {
+        if (!$this->whiteListedUsers->contains($whiteListedUser)) {
+            $this->whiteListedUsers->add($whiteListedUser);
+        }
+
+        return $this;
+    }
+
+    public function removeWhiteListedUser(User $whiteListedUser): static
+    {
+        $this->whiteListedUsers->removeElement($whiteListedUser);
 
         return $this;
     }
