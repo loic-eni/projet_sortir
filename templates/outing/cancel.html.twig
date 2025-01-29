@@ -3,16 +3,20 @@
 {% block title %}Annuler une sortie{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12 card custom-card">
-                <div class="card-header justify-content-between align-items-center">
-                    <h1 class="text-center">Sortie : {{ outing.name }}</h1>
+    <div class="container mx-auto p-4">
+        <div class="flex justify-center">
+            <div class="w-full max-w-4xl bg-white shadow-md rounded-lg p-6">
+
+                <div class="mb-4">
+                    <h1 class="text-center text-2xl font-semibold text-gray-800">Sortie : {{ outing.name }}</h1>
                 </div>
-                <div class="card-body">
+
+                <div class="my-4">
+                    <h3 class="text-lg font-medium text-gray-700">Motif de l'annulation</h3>
                     {{ form_errors(form_cancel.reason) }}
                     {{ include('outing/_form_cancel.html.twig', {'button_label': 'Annuler la sortie'}) }}
                 </div>
+
             </div>
         </div>
     </div>
