@@ -30,6 +30,10 @@ class PrivateGroup
     #[ORM\OneToMany(targetEntity: Outing::class, mappedBy: 'privateGroup')]
     private Collection $outings;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     public function __construct()
     {
         $this->whiteListedUsers = new ArrayCollection();
@@ -103,6 +107,18 @@ class PrivateGroup
                 $outing->setPrivateGroup(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }

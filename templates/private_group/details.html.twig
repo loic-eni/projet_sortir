@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{group.name}}{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center self-center mt-10">
+        <div class="p-12 bg-white mx-auto rounded-2xl w-100 shadow-xl flex flex-col gap-2 max-w-[700px] min-w-[500px]">
+            <div class="mb-4">
+                <h3 class="font-semibold text-2xl text-gray-800">Groupe privé</h3>
+            </div>
+            <div>Nom: {{ group.name }}</div>
+            <label for="members">Membres: </label>
+            <div class="card card-bordered p-2 flex-row">
+                {% for member in group.whiteListedUsers %}
+                    <div class="badge badge-outlined">{{ member.email }}</div>
+                {% endfor %}
+            </div>
+
+            <a href="{{ path('app_private_group_edit', {id: group.id}) }}" class="btn btn-primary w-full mt-4">Modifier le groupe</a>
+        </div>
+    </div>
+{% endblock %}

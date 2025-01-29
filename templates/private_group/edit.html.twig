@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un nouveau groupe privé{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="flex justify-center items-center self-center mt-4">
+        <div class="p-12 bg-white mx-auto rounded-2xl w-100 shadow-xl flex flex-col gap-2 max-w-[700px] min-w-[500px]">
+            <div class="mb-4">
+                <h3 class="font-semibold text-2xl text-gray-800">Modifier un groupe privé</h3>
+            </div>
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            {{ form_label(form.whiteListedUsers) }}
+            <div id="{{ field_name(form.whiteListedUsers) }}" class="card-bordered max-h-[250px] w-full overflow-y-scroll p-2">
+                {% for label, value in field_choices(form.whiteListedUsers) %}
+                    <div>
+                        <input type="checkbox" value="{{ value }}" {{ value in group.whiteListedUsers|map(u => u.id) ? 'checked="checked"':'' }} id="private_group_whiteListedUsers_{{ value }}" name="{{ field_name(form.whiteListedUsers) }}[]">
+                        <label for="private_group_whiteListedUsers_{{ value }}">{{ label }}</label>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+            <button class="mt-4 w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">Enregistrer les modifications</button>
+            <a href="{{ path('app_private_group_delete', {id: group.id}) }}" class="mt-4 w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">Effacer le groupe</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
