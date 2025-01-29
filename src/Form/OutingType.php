@@ -7,6 +7,7 @@ use App\Entity\Location;
 use App\Entity\Outing;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -124,6 +125,11 @@ class OutingType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'formField'],
             ])
+            ->add('private', CheckboxType::class, [
+                    'label'=>'Sortie privée',
+                    'attr'=>
+                        ['class'=>'checkbox checkbox-primary']
+                ])
         ;
     }
 

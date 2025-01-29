@@ -4,11 +4,13 @@ namespace App\Service;
 
 use App\Entity\Outing;
 use App\Entity\State;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 readonly class OutingService
 {
-    public function __construct(private EntityManagerInterface $entityManager){}
+    public function __construct(private EntityManagerInterface $entityManager, private UserService $userService){}
 
     /**
      * @throws \DateMalformedStringException
@@ -58,6 +60,21 @@ readonly class OutingService
             $this->entityManager->flush();
         }
         return null;
+    }
+
+    /**
+     * Filters outings depending on wether the user has access to it or not, see UserService->hasAccessTo to see the filter rule
+     * @param array $outings
+     * @param User|UserInterface $user
+     * @return array
+     */
+    public function filterOutingsByAccess(array $outings, User|UserInterface|null $user): array{
+        $filteredOutings = [];
+        foreach ($outings as $outing)
+            if($this->userService->hasAccessTo($user, $outing))
+                $filteredOutings[] = $outing;
+
+        return $filteredOutings;
     }
 
 }

@@ -48,6 +48,10 @@
                 {{ form_widget(outingForm.campus, { 'attr': { 'class': 'select select-bordered w-full max-w-xs' } }) }}
                 {{ form_errors(outingForm.campus) }}
             </label>
+            <div class="flex gap-10 p-2 px-1">
+                <span class="label-text">{{ field_label(outingForm.private) }}</span>
+                {{ form_widget(outingForm.private) }}
+            </div>
         </div>
             <div class="divider lg:divider-horizontal"></div>
             <div>

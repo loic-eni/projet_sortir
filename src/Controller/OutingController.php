@@ -42,6 +42,7 @@ final class OutingController extends BaseController
             $outingFilter->setUser($user);
 
             $outings = $outingRepository->findByFilter($outingFilter);
+            $outings = $outingService->filterOutingsByAccess($outings, $user);
 
             return $this->render('outing/list.html.twig', [
                 'outings' => $outings,
@@ -52,6 +53,7 @@ final class OutingController extends BaseController
         }
 
         $outings = $outingRepository->findAll();
+        $outings = $outingService->filterOutingsByAccess($outings, $user);
 
         return $this->render('outing/list.html.twig', [
             'outings'=>$outings,
@@ -145,9 +147,13 @@ final class OutingController extends BaseController
     public function details(
         int $id,
         OutingRepository $outingRepository,
+        UserService $userService,
         ?Redirection $redirection
     ): Response {
         $outing = $outingRepository->find($id);
+
+        if(!$userService->hasAccessTo($this->getUser(), $outing))
+            throw new AccessDeniedException('Cette sortie est privée et vous n\'y avez pas accès.');
 
         $currentDate = new \DateTime();
         $oneMonthAgo = $currentDate->modify('-1 month');

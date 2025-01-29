@@ -5,7 +5,12 @@
         <div class="w-3/4 flex justify-between">
 
             <div class="w-2/4">
-                <h3 class="font-semibold text-2xl text-gray-800">{{ outing.name }} </h3>
+                <h3 class="font-semibold text-2xl text-gray-800">
+                    {{ outing.name }}
+                    {% if outing.private %}
+                        <div class="badge badge-error">privée</div>
+                    {% endif %}
+                </h3>
                 <div class="card-text my-2 h4">
                     {% if outing.state %}
                     {% set stateClass = {
@@ -145,8 +150,8 @@
                     {% endfor %}
                     </tbody>
                 </table>
+
             </div>
         </div>
-
     </div>
 {% endblock %}
