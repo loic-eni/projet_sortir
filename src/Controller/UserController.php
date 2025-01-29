@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class UserController extends AbstractController
@@ -89,5 +90,25 @@ final class UserController extends AbstractController
         return $this->render('outing/show_profile.html.twig', [
             'user' => $user,
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/profile/deactivate/{id}', name: 'app_deactivate_profile', methods: ['GET'])]
+    public function deactivateUser(User $user, EntityManagerInterface $entityManager): Response{
+        $user->setActive(false);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_show_profile', ['id' => $user->getId()]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/profile/reactivate/{id}', name: 'app_reactivate_profile', methods: ['GET'])]
+    public function reactivateUser(User $user, EntityManagerInterface $entityManager): Response{
+        $user->setActive(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_show_profile', ['id' => $user->getId()]);
     }
 }

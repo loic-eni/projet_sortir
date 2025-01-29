@@ -25,6 +25,14 @@
                         <p class="italic">Aucun campus</p>
                     {% endif %}
                 </div>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    {% if user.active %}
+                        <a href="{{ path('app_deactivate_profile', {id: user.id}) }}" class="btn btn-md btn-error">Désactiver le compte</a>
+                        {% else %}
+                        <a href="{{ path('app_reactivate_profile', {id: user.id}) }}" class="btn btn-md btn-success">Réactiver le compte</a>
+                    {% endif %}
+                {% endif %}
             </div>
     </div>
 {% endblock %}
