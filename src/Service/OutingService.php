@@ -5,12 +5,14 @@ namespace App\Service;
 use App\Entity\Outing;
 use App\Entity\State;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 readonly class OutingService
 {
-    public function __construct(private EntityManagerInterface $entityManager, private UserService $userService){}
+
+    public function __construct(private EntityManagerInterface $entityManager, private UserRepository $userRepository){}
 
     /**
      * @throws \DateMalformedStringException
@@ -63,18 +65,41 @@ readonly class OutingService
     }
 
     /**
-     * Filters outings depending on wether the user has access to it or not, see UserService->hasAccessTo to see the filter rule
+     * Filters outings depending on whether the user has access to it or not, see UserService->hasAccessTo to see the filter rule
+     * @param User|UserInterface|null $user
      * @param array $outings
-     * @param User|UserInterface $user
      * @return array
      */
-    public function filterOutingsByAccess(array $outings, User|UserInterface|null $user): array{
+    public function filterOutingsByAccess(User|UserInterface|null $user, array $outings): array{
         $filteredOutings = [];
         foreach ($outings as $outing)
-            if($this->userService->hasAccessTo($user, $outing))
+            if($this->hasAccessTo($user, $outing))
                 $filteredOutings[] = $outing;
 
         return $filteredOutings;
+    }
+
+    /**
+     * A user has access to an outing if:
+     *  - the outing is not private
+     *  - the outing is private but the user is its organizer
+     *  - the outing is private but the user is whitelisted (outing->privateGroup->whiteListedUsers)
+     * @param User|UserInterface|null $user
+     * @param Outing $outing
+     * @return bool
+     */
+    public function hasAccessTo(User|UserInterface|null $user, Outing $outing): bool{
+        if(!$outing->isPrivate())return true;
+        if($user === null) return false;
+
+        $user = $this->userRepository->find($user->getId());
+
+        if(gettype($outing) === "string")
+            $outing = $this->userRepository->find($outing);
+
+        $privateGroup = $outing->getPrivateGroup();
+
+        return ($privateGroup !== null && $privateGroup->getWhiteListedUsers()->contains($user)) || $outing->getOrganizer() === $user;
     }
 
 }

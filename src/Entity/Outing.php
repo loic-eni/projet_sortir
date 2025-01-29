@@ -60,16 +60,12 @@ class Outing
     #[ORM\Column]
     private ?bool $private = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToMany(targetEntity: User::class)]
-    private Collection $whiteListedUsers;
+    #[ORM\ManyToOne(inversedBy: 'outings')]
+    private ?PrivateGroup $privateGroup = null;
 
     public function __construct()
     {
         $this->participants = new ArrayCollection();
-        $this->whiteListedUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -248,26 +244,14 @@ class Outing
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getWhiteListedUsers(): Collection
+    public function getPrivateGroup(): ?PrivateGroup
     {
-        return $this->whiteListedUsers;
+        return $this->privateGroup;
     }
 
-    public function addWhiteListedUser(User $whiteListedUser): static
+    public function setPrivateGroup(?PrivateGroup $privateGroup): static
     {
-        if (!$this->whiteListedUsers->contains($whiteListedUser)) {
-            $this->whiteListedUsers->add($whiteListedUser);
-        }
-
-        return $this;
-    }
-
-    public function removeWhiteListedUser(User $whiteListedUser): static
-    {
-        $this->whiteListedUsers->removeElement($whiteListedUser);
+        $this->privateGroup = $privateGroup;
 
         return $this;
     }
