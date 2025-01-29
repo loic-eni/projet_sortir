@@ -3,20 +3,6 @@
 {% block title %}Modifier mon compte{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper {
-        margin: 1em auto;
-        max-width: 800px;
-        width: 95%;
-        font: 18px/1.5 sans-serif;
-    }
-
-    .example-wrapper code {
-        background: #F5F5F5;
-        padding: 2px 6px;
-    }
-</style>
-
 <div class="container">
     <div>
         <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Modifier mon compte</h3>
@@ -26,6 +12,7 @@
                 <img src="{{ asset('uploads/profile_image/' ~ app.user.imgPath ) }}" alt="Image profile"/>
             </div>
         {% endif %}
+
         <div>
             <label class="form-control w-full max-w-xs">
                 <div class="label">
@@ -66,9 +53,23 @@
         </div>
         {{ form_end(editAccountForm) }}
         <div class="divider"></div>
-
+        <label>
+            <select name="theme" class="select select-bordered w-full max-w-xs">
+                <option disabled selected>Themes</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="coffee">Coffee</option>
+                <option value="cupcake">Cupcake</option>
+                <option value="valentine">Valentine</option>
+                <option value="cyberpunk">Cyberpunk</option>
+                <option value="aqua">Aqua</option>
+            </select>
+        </label>
+        <div class="divider"></div>
         <div class="flex justify-center">
             <a href="{{ path('app_changePassword') }}" class="btn btn-primary my-2">Changer mon mot de passe</a>
         </div>
     </div>
+</div>
     {% endblock %}
+

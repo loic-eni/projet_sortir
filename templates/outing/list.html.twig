@@ -8,7 +8,7 @@
 
         {% if(is_granted('ROLE_USER')) %}
             {{ form_start(form) }}
-            <div class="p-6 bg-white mx-auto rounded-2xl shadow-xl gap-20 flex-col w-full sm:w-3/4">
+            <div class="p-6 mx-auto rounded-2xl shadow-xl gap-20 flex-col w-full sm:w-3/4 bg-base-100">
                 {% if filterEmpty == false %}
                     <a href="{{ path('outing_list') }}" class="link-primary">Réinitialiser les filtres</a>
                 {% endif %}
@@ -58,9 +58,9 @@
         {% endif %}
 
         {% if outings|length > 0 %}
-            <div class="p-6 bg-white mx-auto rounded-xl shadow-xl gap-20 flex-col w-full sm:w-5/6 pt-0 max-h-[70vh] overflow-y-scroll">
+            <div class="p-6 mx-auto rounded-xl shadow-xl gap-20 flex-col w-full sm:w-5/6 pt-0 max-h-[70vh] overflow-y-scroll">
                 <table class="table overflow-x-auto max-h-200">
-                    <thead class="sticky top-0 bg-white">
+                    <thead class="sticky top-0 bg-base-100">
                     <tr>
                         <td class="p-2">Nom</td>
                         <td class="p-2">Site</td>
