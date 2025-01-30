@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une localisation{% endblock %}
+
+{% block body %}
+    <section class="container">
+    {{ form_start(locationForm, {'method': 'PUT'}) }}
+    <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Créer une localisation</h3>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">Nom</span>
+        </div>
+        <input name="{{ field_name(locationForm.name) }}"
+               value="{{ field_value(locationForm.name) }}"
+               type="text"
+               placeholder="{{ field_label(locationForm.name) }}"
+               class="input input-bordered w-full max-w-xs"
+        />
+        {{ form_errors(locationForm.name) }}
+    </label>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">Street</span>
+        </div>
+        <input name="{{ field_name(locationForm.street) }}"
+               value="{{ field_value(locationForm.street) }}"
+               type="text"
+               placeholder="{{ field_label(locationForm.street) }}"
+               class="input input-bordered w-full max-w-xs"/>
+        {{ form_errors(locationForm.street) }}
+    </label>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">Latitute</span>
+        </div>
+        <input name="{{ field_name(locationForm.lat) }}"
+               value="{{ field_value(locationForm.lat) }}"
+               type="text"
+               placeholder="{{ field_label(locationForm.lat) }}"
+               class="input input-bordered w-full max-w-xs"/>
+        {{ form_errors(locationForm.lat) }}
+    </label>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">Longitude</span>
+        </div>
+        <input name="{{ field_name(locationForm.lng) }}"
+               value="{{ field_value(locationForm.lng) }}"
+               type="text"
+               placeholder="{{ field_label(locationForm.lng) }}"
+               class="input input-bordered w-full max-w-xs"/>
+        {{ form_errors(locationForm.lng) }}
+    </label>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">Lieu</span>
+        </div>
+        {{ form_widget(locationForm.city, { 'attr': { 'class': 'select select-bordered w-full max-w-xs' } }) }}
+        {{ form_errors(locationForm.city) }}
+    </label>
+    <div class="flex justify-center">
+        <button type="submit" class="btn btn-primary my-2">Enregistrer une localisation</button>
+    </div>
+    {{ form_end(locationForm) }}
+{% endblock %}
