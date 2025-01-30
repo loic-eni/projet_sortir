@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Controller\Exceptions\DeactivatedAccountException;
 use App\Entity\Location;
 use App\Form\LocationFilterType;
 use App\Form\LocationType;
 use App\Repository\LocationRepository;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +21,11 @@ final class LocationController extends AbstractController
 {
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager,  UserService $userService): Response
     {
+        if(!$userService->isUserActive($this->getUser()->getId()))
+            throw new DeactivatedAccountException();
+
         $location = new Location();
 
         $locationForm = $this->createForm(LocationType::class, $location);

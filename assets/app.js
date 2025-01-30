@@ -7,4 +7,23 @@ import './bootstrap.js';
  */
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    const themeSelect = document.querySelector('select[name="theme"]');
+
+    if (themeSelect) {
+        themeSelect.value = savedTheme;
+
+        themeSelect.addEventListener('change', function () {
+            const selectedTheme = themeSelect.value;
+            document.documentElement.setAttribute('data-theme', selectedTheme);
+            localStorage.setItem('theme', selectedTheme);
+        });
+    }
+});
+
+
+

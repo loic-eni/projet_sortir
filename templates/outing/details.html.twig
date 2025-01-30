@@ -1,93 +1,95 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <div class="w-3/4 flex justify-between">
+    <div class="container mx-auto p-4">
+        <div class="flex flex-col lg:flex-row justify-between w-full gap-6"
 
-            <div class="w-2/4">
+            <!-- Left side (outing details) -->
+            <div class="w-full lg:w-2/3">
                 <h3 class="font-semibold text-2xl text-gray-800">{{ outing.name }} </h3>
+
                 <div class="card-text my-2 h4">
                     {% if outing.state %}
-                    {% set stateClass = {
-                        (state[0]): 'text-success',
-                        (state[1]): 'text-success',
-                        (state[2]): 'text-danger',
-                        (state[3]): 'text-success',
-                        (state[4]): 'badge-error ',
-                        (state[5]): 'badge-error ',
-                        (state[5]): 'badge-error ',
-                    }[outing.state.label] ?? '' %}
-                        <div class="flex">
-                            <p class="badge badge-outline {{ stateClass }}">{{ outing.state.label }}
-                            </p>
-                            <p class="mx-2">Organiser par  <a href="{{ path('app_show_profile', {'id': outing.organizer.id }) }}" class="link link-primary">{{ outing.organizer.firstname }} {{ outing.organizer.lastname }}</a></p>
+                        {% set stateClass = {
+                            (state[0]): 'text-success',
+                            (state[1]): 'text-success',
+                            (state[2]): 'text-danger',
+                            (state[3]): 'text-success',
+                            (state[4]): 'badge-error',
+                            (state[5]): 'badge-error',
+                        }[outing.state.label] ?? '' %}
+                        <div class="flex items-center space-x-2">
+                            <p class="badge badge-outline {{ stateClass }}">{{ outing.state.label }}</p>
+                            <p class="mx-2">Organisé par <a href="{{ path('app_show_profile', {'id': outing.organizer.id }) }}" class="link link-primary">{{ outing.organizer.firstname }} {{ outing.organizer.lastname }}</a></p>
                         </div>
-                {% endif %}
-                </div>
-                <div class="detailsField">
-                    <strong>Lieu :</strong> {{ outing.location.name }}
-                </div>
-                <div class="detailsField">
-                    <strong>Site :</strong> {{ outing.campus.name }}
-                </div>
-                <div class="detailsField">
-                    <strong>Rue :</strong> {{ outing.location.street }}
-                </div>
-                <div class="detailsField">
-                    <strong>Ville :</strong> {{ outing.location.city.name }}
-                </div>
-                <div class="detailsField">
-                    <strong>Code postal :</strong> {{ outing.location.city.zip }}
-                </div>
-                <div class="detailsField">
-                    <strong>Date et heure de la sortie :</strong> {{ outing.startDate |date('d/m/Y H:i', 'Europe/Paris') }}
+                    {% endif %}
                 </div>
 
-                <div class="detailsField">
+                <div class="detailsField my-2">
+                    <strong>Lieu :</strong> {{ outing.location.name }}
+                </div>
+                <div class="detailsField my-2">
+                    <strong>Site :</strong> {{ outing.campus.name }}
+                </div>
+                <div class="detailsField my-2">
+                    <strong>Rue :</strong> {{ outing.location.street }}
+                </div>
+                <div class="detailsField my-2">
+                    <strong>Ville :</strong> {{ outing.location.city.name }}
+                </div>
+                <div class="detailsField my-2">
+                    <strong>Code postal :</strong> {{ outing.location.city.zip }}
+                </div>
+                <div class="detailsField my-2">
+                    <strong>Date et heure de la sortie :</strong> {{ outing.startDate |date('d/m/Y H:i', 'Europe/Paris') }}
+                </div>
+                <div class="detailsField my-2">
                     <strong>Date limite d'inscription :</strong> {{ outing.registrationMaxDate |date('d/m/Y H:i', 'Europe/Paris') }}
                 </div>
-                <div class="detailsField">
+                <div class="detailsField my-2">
                     <strong>Nombre de places :</strong> {{ outing.maxInscriptions }}
                 </div>
-                <div class="detailsField">
+                <div class="detailsField my-2">
                     <strong>Durée :</strong> {{ outing.duration }} minutes
                 </div>
-                <div class="detailsField">
+                <div class="detailsField my-2">
                     <strong>Description et infos :</strong> {{ outing.outingInfo }}
                 </div>
-                <div class="detailsField">
+                <div class="detailsField my-2">
                     <strong>Longitude :</strong> {{ outing.location.lng }}
                 </div>
-                <div class="detailsField">
+                <div class="detailsField my-2">
                     <strong>Latitude :</strong> {{ outing.location.lat }}
                 </div>
-                <div class="my-2">
+
+                <div class="my-4">
                     {% set isAlreadyRegistered = app.user and outing.participants|filter(user => user.id == app.user.id)|length > 0 %}
                     {% if isAlreadyRegistered %}
-                        <a href="{{ path('outing_register_remove', {'id': outing.id}) }}" class="btn btn-warning w-100 my-1">Se désinscrire de cette sortie</a>
+                        <a href="{{ path('outing_register_remove', {'id': outing.id}) }}" class="btn btn-warning w-1/4 my-2">Se désinscrire de cette sortie</a>
                     {% else %}
                         {% if app.user == null or outing.organizer.id != app.user.id %}
                             {% if (outing.state.label == state[1]) and outing.participants|length < outing.maxInscriptions %}
-                                <a href="{{ path('outing_register_new', {'id': outing.id}) }}" class="btn btn-primary w-100 my-1">S'inscrire à cette sortie</a>
-                                {% else %}
+                                <a href="{{ path('outing_register_new', {'id': outing.id}) }}" class="btn btn-primary w-1/4 my-2">S'inscrire à cette sortie</a>
+                            {% else %}
                                 {% if (outing.participants|length < outing.maxInscriptions) %}
                                     <p class="text-orange-500">Vous ne pouvez pas vous inscrire, la sortie n'a pas été publiée</p>
                                 {% else %}
                                     <p class="text-orange-500">Vous ne pouvez pas vous inscrire, il n'y a plus de place libre pour cette sortie</p>
                                 {% endif %}
                             {% endif %}
-                            {% else %}
+                        {% else %}
                             <p class="badge badge-outline">Vous êtes l'organisateur</p>
-                                    {% if outing.state.label != state[1] %}
-                                        <div class="m-2">
-                                            <a href="{{ path('outing_edit', {'id': outing.id}) }}" class="btn btn-primary w-100 my-1">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </a>
-                                        </div>
-                                    {% endif %}
+                            {% if outing.state.label != state[1] %}
+                                <div class="m-2">
+                                    <a href="{{ path('outing_edit', {'id': outing.id}) }}" class="btn btn-primary w-1/4 my-2">
+                                        <i class="fa-solid fa-pen"></i> Modifier
+                                    </a>
+                                </div>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </div>
+
                 <div class="d-flex align-items-center">
                     {% if outing.organizer.id == app.user.id or is_granted('ROLE_ADMIN') %}
                         {% if outing.state.label == state[5] %}
@@ -99,32 +101,33 @@
                                 {% set currentDate = "now"|date("Y-m-d H:i:s", "Europe/Paris") %}
 
                                 {% if dateStart > currentDate %}
-                                    <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
-                                       class="btn btn-error w-100 my-1">
-                                        Annulation
+                                    <a href="{{ path('outing_cancel', {'id': outing.id}) }}" class="btn btn-error w-1/4 my-2">
+                                        Annuler la sortie
                                     </a>
                                 {% else %}
-                                    <p class="badge badge-warning w-100 ">La sortie est commencée, impossible d'annuler</p>
+                                    <p class="badge badge-warning w-1/4l ">La sortie a commencé, impossible d'annuler</p>
                                 {% endif %}
                             </div>
                         {% endif %}
-                        {% if outing.state.label != state[1]  %}
+                        {% if outing.state.label != state[1] %}
                             <div>
-                                <a href="{{ path('outing_publish', {'id': outing.id}) }}" class="btn btn-primary w-100 m-2">Publier</a>
+                                <a href="{{ path('outing_publish', {'id': outing.id}) }}" class="btn btn-primary w-1/4 m-2">Publier</a>
                             </div>
                         {% endif %}
                     {% endif %}
                 </div>
             </div>
-            <div class="divider lg:divider-horizontal"></div>
-            <div class="overflow-x-auto w-1/3">
-                <h3 class="font-semibold text-xl text-gray-800">{{ participants|length}} participant(s) inscrits  </h3>
-                <table class="table table-zebra">
+
+            <!-- Right side (participants list) -->
+            <div class="lg:w-1/3 overflow-x-auto">
+                <h3 class="font-semibold text-xl text-gray-800 mb-4">{{ participants|length }} participant(s) inscrit(s)</h3>
+                <table class="table table-zebra w-full">
                     <thead>
                     <tr>
-                        <th>id</th>
+                        <th>ID</th>
                         <th>Nom</th>
                         <th>Prénom</th>
+                        <th>Profil</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -134,19 +137,17 @@
                             <td>{{ participant.firstname }}</td>
                             <td>{{ participant.lastname }}</td>
                             <td>
-
                                 <a href="{{ path('app_show_profile', {'id': participant.id }) }}" class="btn btn-primary"><i class="fa-solid fa-id-badge"></i></a>
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="2">Aucun participant trouvé.</td>
+                            <td colspan="4" class="text-center">Aucun participant trouvé.</td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
 {% endblock %}
