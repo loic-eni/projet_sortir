@@ -92,7 +92,7 @@ final class OutingController extends BaseController
 
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function edit(Request $request, Outing $outing, EntityManagerInterface $entityManager, OutingService $outingService, ): Response
+    public function edit(Request $request, Outing $outing, EntityManagerInterface $entityManager, OutingService $outingService, UserService $userService): Response
     {
         $currentUser = $this->getUser();
 
@@ -102,10 +102,11 @@ final class OutingController extends BaseController
 
         if ($currentUser !== $outing->getOrganizer()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
+        }
 
-
-        if(!$userService->isUserActive($this->getUser()->getId()))
+        if (!$userService->isUserActive($this->getUser()->getId())) {
             throw new DeactivatedAccountException();
+        }
 
         if ($outing->getState()->getLabel() !== State::STATE_CREATED) {
             $this->addFlash('error', 'Vous ne pouvez pas modifier une sortie dont le statut n\'est pas "Créé".');
@@ -130,7 +131,7 @@ final class OutingController extends BaseController
 
     #[Route('/publish/{id}', name: 'publish', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function publish(Outing $outing, StateRepository $stateRepository,  EntityManagerInterface $entityManager, OutingService $outingService, , UserService $userService): Response
+    public function publish(Outing $outing, StateRepository $stateRepository,  EntityManagerInterface $entityManager, OutingService $outingService, UserService $userService): Response
     {
         $currentUser = $this->getUser();
 
@@ -140,9 +141,11 @@ final class OutingController extends BaseController
 
         if ($currentUser !== $outing->getOrganizer()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
+        }
 
-        if(!$userService->isUserActive($this->getUser()->getId()))
+        if (!$userService->isUserActive($this->getUser()->getId())) {
             throw new DeactivatedAccountException();
+        }
 
         $outing->setState($stateRepository->findOneBy(['label' => State::STATE_OPENED ]));
         $entityManager->flush();
