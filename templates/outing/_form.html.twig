@@ -58,16 +58,16 @@
                 </div>
             </div>
             <script>
-                document.addEventListener('turbo:load', ()=>{
+                const enableToggleGroupSelect = ()=>{
                     const privateGroupSelect = document.getElementById('outing_private');
                     const privateGroupContainer = document.getElementById('private-group-container');
-                    privateGroupSelect.addEventListener('change', (e)=>{
-                        if(e.target.checked)
-                            privateGroupContainer.classList.remove('hidden');
-                        else
-                            privateGroupContainer.classList.add('hidden');
-                    })
-                })
+
+                    if(!privateGroupSelect || !privateGroupContainer)return;
+
+                    privateGroupSelect.addEventListener('change', ({target: {checked}})=>privateGroupContainer.classList[checked?'remove':'add']('hidden'))
+                }
+                document.addEventListener('turbo:load', enableToggleGroupSelect);
+                document.addEventListener('turbo:render', enableToggleGroupSelect);
             </script>
         </div>
             <div class="divider lg:divider-horizontal"></div>

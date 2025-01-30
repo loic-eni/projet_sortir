@@ -21,6 +21,10 @@
                     <hr>
                 {% endfor %}
             </div>
+            {% if redirection != null %}
+                <input type="text" name="redirection[label]" value="{{ redirection.label }}" style="display:none">
+                <input type="text" name="redirection[url]" value="{{ redirection.url }}" style="display:none">
+            {% endif %}
             <button class="mt-4 w-full flex justify-center btn btn-active btn-primary  hover:bg-white hover:text-gray-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">Créer le groupe</button>
         </div>
     </div>

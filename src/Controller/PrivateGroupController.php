@@ -32,7 +32,6 @@ final class PrivateGroupController extends AbstractController
 
     #[Route('/private_group/create', name: 'app_private_group_create')]
     public function create(Request $request, ?Redirection $redirection): Response{
-
         $form = $this->createForm(PrivateGroupType::class);
         $form->handleRequest($request);
 
@@ -44,7 +43,7 @@ final class PrivateGroupController extends AbstractController
             $this->entityManager->flush();
             $this->addFlash('success', 'Nouveau groupe privé "' . $privateGroup->getName() . '" créé');
 
-            return $this->redirectToRoute('app_private_group_details', ['id' => $privateGroup->getId()]);
+            return $this->redirectToRoute('app_private_group_details', ['id' => $privateGroup->getId(), 'redirection'=>$redirection->toArray()]);
         }
 
         return $this->render('private_group/create.html.twig', [
@@ -55,11 +54,11 @@ final class PrivateGroupController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Route('/private_group/{id}', name: 'app_private_group_details')]
-    public function details(PrivateGroup $privateGroup): Response{
+    public function details(PrivateGroup $privateGroup, ?Redirection $redirection): Response{
         if(!$this->privateGroupService->hasAccessTo($this->getUser(), $privateGroup))
             throw new AccessDeniedException('Vous n\'avez pas accès à ce groupe privé');
 
-        return $this->render('private_group/details.html.twig', ['group'=>$privateGroup]);
+        return $this->render('private_group/details.html.twig', ['group'=>$privateGroup, 'redirection'=>$redirection]);
     }
 
     #[Route('/private_group/edit/{id}', name: 'app_private_group_edit')]
