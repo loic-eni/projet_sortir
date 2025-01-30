@@ -4,6 +4,9 @@ module.exports = {
     "./assets/**/*.js",
     "./templates/**/*.html.twig",
   ],
+  daisyui: {
+    themes: ["light", "dark", "cupcake", "coffee", "valentine", "cyberpunk", "aqua"],
+  },
   theme: {
     extend: {},
   },
