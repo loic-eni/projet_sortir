@@ -60,6 +60,15 @@
                 <div class="detailsField">
                     <strong>Description et infos :</strong> {{ outing.outingInfo }}
                 </div>
+                {% if outing.private %}
+                    <div class="detailsField">
+                        <strong>Groupe privé :</strong>
+                        <a
+                                href="{{ path('app_private_group_details', {id: outing.privateGroup.id}) }}"
+                                class="link link-primary"
+                        >{{ outing.privateGroup.name }}</a>
+                    </div>
+                {% endif %}
                 <div class="detailsField">
                     <strong>Longitude :</strong> {{ outing.location.lng }}
                 </div>
@@ -150,6 +159,17 @@
                     {% endfor %}
                     </tbody>
                 </table>
+
+                {% if outing.private %}
+                    <div class="card card-bordered p-4 mt-4">
+                        <h3>Membres autorisés: </h3>
+                        <div>
+                            {% for member in outing.privateGroup.whiteListedUsers %}
+                                <div class="badge badge-outlined">{{ member.email }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
 
             </div>
         </div>

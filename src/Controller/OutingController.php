@@ -87,6 +87,8 @@ final class OutingController extends BaseController
         if($outingForm->isSubmitted() && $outingForm->isValid()){
             $outing->setOrganizer($this->getUser());
             $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CREATED]));
+            if(!$outing->isPrivate())
+                $outing->setPrivateGroup(null);
 
             $this->entityManager->persist($outing);
             $this->entityManager->flush();
@@ -96,7 +98,7 @@ final class OutingController extends BaseController
             return $this->redirectToRoute('outing_list');
         }
 
-        return $this->render('outing/_form.html.twig', [
+        return $this->render('outing/create.html.twig', [
             'outingForm' => $outingForm,
             ]
         );

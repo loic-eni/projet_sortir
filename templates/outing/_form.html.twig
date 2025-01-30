@@ -1,7 +1,3 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Préparer une sortie{% endblock %}
-
 {% block body %}
     <section class="container">
         {{ form_start(outingForm, {'attr': {'novalidate': 'novalidate'}}) }}
@@ -52,6 +48,27 @@
                 <span class="label-text">{{ field_label(outingForm.private) }}</span>
                 {{ form_widget(outingForm.private) }}
             </div>
+            <div class="hidden mt-[-10px]" id="private-group-container">
+                <div class="label">
+                    <span class="label-text">{{ field_label(outingForm.privateGroup) }}</span>
+                </div>
+                <div class="flex align-center gap-2">
+                    {{ form_widget(outingForm.privateGroup) }}
+                    <a href="{{ path('app_private_group_create', {redirection: {label: 'Retour a la creation de sortie', url: path('outing_create')}}) }}" class="btn btn-primary btn-sm text-xs"><i class="fas fa-plus"></i> Créer un groupe</a>
+                </div>
+            </div>
+            <script>
+                document.addEventListener('turbo:load', ()=>{
+                    const privateGroupSelect = document.getElementById('outing_private');
+                    const privateGroupContainer = document.getElementById('private-group-container');
+                    privateGroupSelect.addEventListener('change', (e)=>{
+                        if(e.target.checked)
+                            privateGroupContainer.classList.remove('hidden');
+                        else
+                            privateGroupContainer.classList.add('hidden');
+                    })
+                })
+            </script>
         </div>
             <div class="divider lg:divider-horizontal"></div>
             <div>
