@@ -18,17 +18,21 @@ class OutingRepository extends ServiceEntityRepository
     }
 
     public function findByFilter(OutingFilter $filter, ?int $limit = 20){
-        $query = $this->createQueryBuilder('o')->setMaxResults($limit|10);
+        $query = $this
+            ->createQueryBuilder('o')
+            ->setMaxResults($limit|10)
+            ->join('o.location', 'l')
+            ->where('l.deletedAt IS NULL');
 
         if($filter->getCampus() !== null)
             $query
-                ->where('o.campus = :campus')
+                ->andWhere('o.campus = :campus')
                 ->setParameter('campus', $filter->getCampus());
 
         if($filter->getNameSearch() !== null && $filter->getNameSearch() !== "")
             $query
-                ->andWhere('o.name LIKE %:nameSearch%')
-                ->setParameter('nameSearch', $filter->getNameSearch());
+                ->andWhere($query->expr()->like('o.name', ':nameSearch'))
+                ->setParameter('nameSearch', '%' . $filter->getNameSearch() . '%');
 
         if($filter->getStartsAfter() !== null)
             $query
@@ -70,8 +74,15 @@ class OutingRepository extends ServiceEntityRepository
         }
 
         $query = $query->getQuery();
-        dump($query);
         return $query->getResult();
+    }
+
+    public function findAllVisible() : array
+    {
+        $query = $this->createQueryBuilder('o')
+            ->join('o.location', 'l')
+            ->where('l.deletedAt IS NULL');
+        return $query->getQuery()->getResult();
     }
 
 //    /**

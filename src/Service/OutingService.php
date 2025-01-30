@@ -60,4 +60,8 @@ readonly class OutingService
         return null;
     }
 
+    public function isVisibleOuting(Outing $outing): bool
+    {
+        return !$outing->getLocation()->isDeleted();
+    }
 }

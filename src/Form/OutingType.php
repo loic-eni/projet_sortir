@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\Location;
 use App\Entity\Outing;
+use App\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -112,6 +113,9 @@ class OutingType extends AbstractType
             ])
             ->add('location', EntityType::class, [
                 'class' => location::class,
+                'query_builder' => function (LocationRepository $locationRepository) {
+                    return $locationRepository->createQueryBuilder('l')->andWhere('l.deletedAt IS NULL');
+                },
                 'choice_label' => 'name',
                 'label' => 'Localisation: ',
                 'required' => true,
