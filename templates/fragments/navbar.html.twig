@@ -35,10 +35,15 @@
                                     <span class="badge">Nouveau</span>
                                 </a>
                             </li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path("location_list") }}">Liste des localisations</a></li>
+                            {% endif %}
                             <li><a href="{{ path('app_logout') }}">Me déconnecter</a></li>
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
             {% else %}
                 <a class="btn btn-active btn-primary" href="{{ path('app_login') }}">Me connecter</a>
             {% endif %}

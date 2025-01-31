@@ -32,6 +32,9 @@ class Location
     #[ORM\ManyToOne(inversedBy: 'locations')]
     private ?city $city = null;
 
+    #[ORM\Column(type: 'datetime' ,nullable: true)]
+    private ?\DateTimeInterface $deletedAt = null;
+
     /**
      * @var Collection<int, Outing>
      */
@@ -53,7 +56,7 @@ class Location
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -65,7 +68,7 @@ class Location
         return $this->street;
     }
 
-    public function setStreet(string $street): static
+    public function setStreet(?string $street): static
     {
         $this->street = $street;
 
@@ -136,5 +139,15 @@ class Location
         }
 
         return $this;
+    }
+
+    public function softDelete(): void
+    {
+        $this->deletedAt = new \DateTime();
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
     }
 }

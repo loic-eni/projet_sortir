@@ -60,8 +60,8 @@ final class OutingController extends BaseController
                 'outingStates'=>$this::STATE
             ]);
         }
-
-        $outings = $this->outingRepository->findAll();
+      
+        $outings = $this->outingRepository->findAllVisible();
         $outings = $this->outingService->filterOutingsByAccess($user, $outings);
 
         return $this->render('outing/list.html.twig', [
@@ -109,12 +109,18 @@ final class OutingController extends BaseController
     public function edit(Request $request, Outing $outing): Response
     {
         $currentUser = $this->getUser();
-        if ($currentUser !== $outing->getOrganizer())
+
+        if (!$outingService->isVisibleOuting($outing)) {
+            throw $this->createNotFoundException("La sortie n'existe pas.");
+        }
+
+        if ($currentUser !== $outing->getOrganizer()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
+        }
 
-
-        if(!$this->userService->isUserActive($this->getUser()->getId()))
+        if (!$userService->isUserActive($this->getUser()->getId())) {
             throw new DeactivatedAccountException();
+        }
 
         if ($outing->getState()->getLabel() !== State::STATE_CREATED) {
             $this->addFlash('error', 'Vous ne pouvez pas modifier une sortie dont le statut n\'est pas "Créé".');
@@ -142,11 +148,18 @@ final class OutingController extends BaseController
     public function publish(Outing $outing, StateRepository $stateRepository): Response
     {
         $currentUser = $this->getUser();
-        if ($currentUser !== $outing->getOrganizer())
+
+        if (!$this->outingService->isVisibleOuting($outing)) {
+            throw $this->createNotFoundException("La sortie n'existe pas.");
+        }
+
+        if ($currentUser !== $outing->getOrganizer()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
+        }
 
         if(!$this->userService->isUserActive($this->getUser()->getId()))
             throw new DeactivatedAccountException();
+        }
 
         $outing->setState($stateRepository->findOneBy(['label' => State::STATE_OPENED ]));
         $this->entityManager->flush();
@@ -160,6 +173,10 @@ final class OutingController extends BaseController
 
         if(!$this->outingService->hasAccessTo($this->getUser(), $outing))
             throw new AccessDeniedException('Cette sortie est privée et vous n\'y avez pas accès.');
+
+        if (!$this->outingService->isVisibleOuting($outing)) {
+            throw $this->createNotFoundException("La sortie n'existe pas.");
+        }
 
         $currentDate = new \DateTime();
         $oneMonthAgo = $currentDate->modify('-1 month');
@@ -185,6 +202,10 @@ final class OutingController extends BaseController
     #[IsGranted("ROLE_USER")]
     public function new(Outing $outing, ?Redirection $redirection): Response
     {
+        if (!$this->outingService->isVisibleOuting($outing)) {
+            throw $this->createNotFoundException("La sortie n'existe pas.");
+        }
+      
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -223,13 +244,17 @@ final class OutingController extends BaseController
     #[IsGranted("ROLE_USER")]
     public function remove(Outing $outing, ?Redirection $redirection): Response
     {
+        if (!$this->outingService->isVisibleOuting($outing)) {
+            throw $this->createNotFoundException("La sortie n'existe pas.");
+        }  
+      
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
         if(!$this->userService->isUserActive($this->getUser()->getId()))
             throw new DeactivatedAccountException();
-
+      
         /** @var User $user */
         $user = $this->getUser();
 
@@ -257,14 +282,13 @@ final class OutingController extends BaseController
     {
         $currentUser = $this->getUser();
 
-        if ($currentUser !== $outing->getOrganizer() && !$currentUser->isAdmin()) {
+        if ($currentUser !== $outing->getOrganizer() && !$currentUser->isAdmin()) 
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
-        }
-
-        if ($outing->getStartDate() <= new \DateTime()) {
+        if ($outing->getStartDate() <= new \DateTime()) 
             throw new AccessDeniedException("La sortie a déjà commencé ou est passée, vous ne pouvez pas l'annuler.");
-        }
-
+        if (!$this->outingService->isVisibleOuting($outing)) 
+            throw $this->createNotFoundException("La sortie n'existe pas.");
+        
         $form = $this->createForm(OutingCancel::class, $outing);
         $form->handleRequest($request);
 
