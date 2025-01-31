@@ -102,4 +102,8 @@ readonly class OutingService
         return ($privateGroup !== null && $privateGroup->getWhiteListedUsers()->contains($user)) || $outing->getOrganizer() === $user;
     }
 
+    public function isVisibleOuting(Outing $outing): bool
+    {
+        return !$outing->getLocation()->isDeleted();
+    }
 }

@@ -7,6 +7,7 @@ use App\Entity\Location;
 use App\Entity\Outing;
 use App\Entity\PrivateGroup;
 use Doctrine\ORM\EntityRepository;
+use App\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -117,6 +118,9 @@ class OutingType extends AbstractType
             ])
             ->add('location', EntityType::class, [
                 'class' => location::class,
+                'query_builder' => function (LocationRepository $locationRepository) {
+                    return $locationRepository->createQueryBuilder('l')->andWhere('l.deletedAt IS NULL');
+                },
                 'choice_label' => 'name',
                 'label' => 'Localisation: ',
                 'required' => true,
