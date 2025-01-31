@@ -110,7 +110,7 @@ final class OutingController extends BaseController
     {
         $currentUser = $this->getUser();
 
-        if (!$outingService->isVisibleOuting($outing)) {
+        if (!$this->outingService->isVisibleOuting($outing)) {
             throw $this->createNotFoundException("La sortie n'existe pas.");
         }
 
@@ -118,7 +118,7 @@ final class OutingController extends BaseController
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
         }
 
-        if (!$userService->isUserActive($this->getUser()->getId())) {
+        if (!$this->userService->isUserActive($this->getUser()->getId())) {
             throw new DeactivatedAccountException();
         }
 
@@ -159,7 +159,6 @@ final class OutingController extends BaseController
 
         if(!$this->userService->isUserActive($this->getUser()->getId()))
             throw new DeactivatedAccountException();
-        }
 
         $outing->setState($stateRepository->findOneBy(['label' => State::STATE_OPENED ]));
         $this->entityManager->flush();
