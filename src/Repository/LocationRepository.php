@@ -18,11 +18,13 @@ class LocationRepository extends ServiceEntityRepository
     }
 
     public function findByFilter(LocationFilter $locationFilter) {
-        $query = $this->createQueryBuilder('o');
+        $query = $this
+                    ->createQueryBuilder('l')
+                    ->where('l.deletedAt IS NULL');
 
         if($locationFilter->getName() !== null){
             $query
-                ->where($query->expr()->like('o.name', ':name'))
+                ->andWhere($query->expr()->like('l.name', ':name'))
                 ->setParameter('name', '%' . $locationFilter->getName() . '%');
         }
 
