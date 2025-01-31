@@ -25,23 +25,33 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/outing', name: 'outing_')]
 final class OutingController extends BaseController
 {
+
+    public function __construct(
+        private readonly OutingRepository       $outingRepository,
+        private readonly OutingService          $outingService,
+        private readonly UserService            $userService,
+        private readonly UserRepository         $userRepository,
+        private readonly EntityManagerInterface $entityManager
+    ){}
+
     #[Route('/list', name: 'list')]
-    public function list(OutingRepository $outingRepository, UserRepository $userRepository, Request $request, OutingService $outingService): Response
+    public function list(Request $request): Response
     {
         $user = $this->getUser();
         if($user)
-            $user = $userRepository->find($user->getId());
+            $user = $this->userRepository->find($user->getId());
 
         $form = $this->createForm(OutingFilterType::class);
         $form->handleRequest($request);
 
-        $outingService->autoUpdateOutingStates();
+        $this->outingService->autoUpdateOutingStates();
 
         if($form->isSubmitted() && $form->isValid() && $user != null){
             $outingFilter = $form->getData();
             $outingFilter->setUser($user);
 
-            $outings = $outingRepository->findByFilter($outingFilter);
+            $outings = $this->outingRepository->findByFilter($outingFilter);
+            $outings = $this->outingService->filterOutingsByAccess($user, $outings);
 
             return $this->render('outing/list.html.twig', [
                 'outings' => $outings,
@@ -50,7 +60,9 @@ final class OutingController extends BaseController
                 'outingStates'=>$this::STATE
             ]);
         }
-        $outings = $outingRepository->findAllVisible();
+      
+        $outings = $this->outingRepository->findAllVisible();
+        $outings = $this->outingService->filterOutingsByAccess($user, $outings);
 
         return $this->render('outing/list.html.twig', [
             'outings'=>$outings,
@@ -62,9 +74,9 @@ final class OutingController extends BaseController
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function create(Request $request, EntityManagerInterface $entityManager, UserService $userService): Response
+    public function create(Request $request): Response
     {
-        if(!$userService->isUserActive($this->getUser()->getId()))
+        if(!$this->userService->isUserActive($this->getUser()->getId()))
             throw new DeactivatedAccountException();
 
         $outing = new Outing();
@@ -74,17 +86,19 @@ final class OutingController extends BaseController
 
         if($outingForm->isSubmitted() && $outingForm->isValid()){
             $outing->setOrganizer($this->getUser());
-            $outing->setState($entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CREATED]));
+            $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CREATED]));
+            if(!$outing->isPrivate())
+                $outing->setPrivateGroup(null);
 
-            $entityManager->persist($outing);
-            $entityManager->flush();
+            $this->entityManager->persist($outing);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'Nouvelle sortie enregistrée.');
 
             return $this->redirectToRoute('outing_list');
         }
 
-        return $this->render('outing/_form.html.twig', [
+        return $this->render('outing/create.html.twig', [
             'outingForm' => $outingForm,
             ]
         );
@@ -92,11 +106,11 @@ final class OutingController extends BaseController
 
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function edit(Request $request, Outing $outing, EntityManagerInterface $entityManager, OutingService $outingService, UserService $userService): Response
+    public function edit(Request $request, Outing $outing): Response
     {
         $currentUser = $this->getUser();
 
-        if (!$outingService->isVisibleOuting($outing)) {
+        if (!$this->outingService->isVisibleOuting($outing)) {
             throw $this->createNotFoundException("La sortie n'existe pas.");
         }
 
@@ -104,7 +118,7 @@ final class OutingController extends BaseController
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
         }
 
-        if (!$userService->isUserActive($this->getUser()->getId())) {
+        if (!$this->userService->isUserActive($this->getUser()->getId())) {
             throw new DeactivatedAccountException();
         }
 
@@ -117,7 +131,7 @@ final class OutingController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->entityManager->flush();
             $this->addFlash('success', 'La sortie ' . $outing->getName() . ' a bien été edité.');
 
             return $this->redirectToRoute('outing_list', [], Response::HTTP_SEE_OTHER);
@@ -131,11 +145,11 @@ final class OutingController extends BaseController
 
     #[Route('/publish/{id}', name: 'publish', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function publish(Outing $outing, StateRepository $stateRepository,  EntityManagerInterface $entityManager, OutingService $outingService, UserService $userService): Response
+    public function publish(Outing $outing, StateRepository $stateRepository): Response
     {
         $currentUser = $this->getUser();
 
-        if (!$outingService->isVisibleOuting($outing)) {
+        if (!$this->outingService->isVisibleOuting($outing)) {
             throw $this->createNotFoundException("La sortie n'existe pas.");
         }
 
@@ -143,26 +157,23 @@ final class OutingController extends BaseController
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
         }
 
-        if (!$userService->isUserActive($this->getUser()->getId())) {
+        if(!$this->userService->isUserActive($this->getUser()->getId()))
             throw new DeactivatedAccountException();
-        }
 
         $outing->setState($stateRepository->findOneBy(['label' => State::STATE_OPENED ]));
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         return $this->redirectToRoute('outing_details', ['id' => $outing->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function details(
-        int $id,
-        OutingRepository $outingRepository,
-        OutingService $outingService,
-        ?Redirection $redirection
-    ): Response {
-        $outing = $outingRepository->find($id);
+    public function details(int $id, ?Redirection $redirection): Response {
+        $outing = $this->outingRepository->find($id);
 
-        if (!$outingService->isVisibleOuting($outing)) {
+        if(!$this->outingService->hasAccessTo($this->getUser(), $outing))
+            throw new AccessDeniedException('Cette sortie est privée et vous n\'y avez pas accès.');
+
+        if (!$this->outingService->isVisibleOuting($outing)) {
             throw $this->createNotFoundException("La sortie n'existe pas.");
         }
 
@@ -188,17 +199,17 @@ final class OutingController extends BaseController
 
     #[Route('/register/new/{id}', name: 'register_new', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function new(EntityManagerInterface $entityManager, Outing $outing, OutingService $outingService, UserService $userService, ?Redirection $redirection): Response
+    public function new(Outing $outing, ?Redirection $redirection): Response
     {
-        if (!$outingService->isVisibleOuting($outing)) {
+        if (!$this->outingService->isVisibleOuting($outing)) {
             throw $this->createNotFoundException("La sortie n'existe pas.");
         }
       
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-      
-        if(!$userService->isUserActive($this->getUser()->getId()))
+
+        if(!$this->userService->isUserActive($this->getUser()->getId()))
             throw new DeactivatedAccountException();
 
         /** @var User $user */
@@ -218,8 +229,8 @@ final class OutingController extends BaseController
         }
 
         $outing->addParticipant($user);
-        $entityManager->persist($outing);
-        $entityManager->flush();
+        $this->entityManager->persist($outing);
+        $this->entityManager->flush();
         $this->addFlash('success', 'Vous avez été inscrit à la sortie.');
 
 
@@ -230,9 +241,9 @@ final class OutingController extends BaseController
 
     #[Route('/register/remove/{id}', name: 'register_remove', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function remove(EntityManagerInterface $entityManager, Outing $outing, OutingService $outingService,UserService $userService, ?Redirection $redirection): Response
+    public function remove(Outing $outing, ?Redirection $redirection): Response
     {
-        if (!$outingService->isVisibleOuting($outing)) {
+        if (!$this->outingService->isVisibleOuting($outing)) {
             throw $this->createNotFoundException("La sortie n'existe pas.");
         }  
       
@@ -240,7 +251,7 @@ final class OutingController extends BaseController
             return $this->redirectToRoute('app_login');
         }
 
-        if(!$userService->isUserActive($this->getUser()->getId()))
+        if(!$this->userService->isUserActive($this->getUser()->getId()))
             throw new DeactivatedAccountException();
       
         /** @var User $user */
@@ -250,8 +261,8 @@ final class OutingController extends BaseController
 
             if ($outing->getStartDate() > new \DateTime()) {
                 $outing->removeParticipant($user);
-                $entityManager->persist($outing);
-                $entityManager->flush();
+                $this->entityManager->persist($outing);
+                $this->entityManager->flush();
 
                 $this->addFlash('success', 'Vous avez été retiré de la sortie.');
             } else {
@@ -266,27 +277,23 @@ final class OutingController extends BaseController
 
     #[Route('/cancel/{id}', name: 'cancel', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")]
-    public function cancel(Request $request, Outing $outing, EntityManagerInterface $entityManager, OutingService $outingService): Response
+    public function cancel(Request $request, Outing $outing): Response
     {
         $currentUser = $this->getUser();
 
-        if ($currentUser !== $outing->getOrganizer() && !$currentUser->isAdmin()) {
+        if ($currentUser !== $outing->getOrganizer() && !$currentUser->isAdmin()) 
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à cette page.");
-        }
-
-        if ($outing->getStartDate() <= new \DateTime()) {
+        if ($outing->getStartDate() <= new \DateTime()) 
             throw new AccessDeniedException("La sortie a déjà commencé ou est passée, vous ne pouvez pas l'annuler.");
-        }
-
-        if (!$outingService->isVisibleOuting($outing)) {
+        if (!$this->outingService->isVisibleOuting($outing)) 
             throw $this->createNotFoundException("La sortie n'existe pas.");
-        }
+        
         $form = $this->createForm(OutingCancel::class, $outing);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $outing->setState($entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CANCELED]));
-            $entityManager->flush();
+            $outing->setState($this->entityManager->getRepository(State::class)->findOneBy(['label' => State::STATE_CANCELED]));
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'La sortie ' . $outing->getName() . ' a bien été annulée.');
             return $this->redirectToRoute('outing_details', ['id' => $outing->getId()], Response::HTTP_SEE_OTHER);

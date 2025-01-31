@@ -69,10 +69,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imgPath = null;
 
+    /**
+     * @var Collection<int, PrivateGroup>
+     */
+    #[ORM\ManyToMany(targetEntity: PrivateGroup::class, mappedBy: 'whiteListedUsers')]
+    private Collection $privateGroups;
+
     public function __construct()
     {
         $this->outing = new ArrayCollection();
         $this->outings = new ArrayCollection();
+        $this->privateGroups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -262,6 +269,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImgPath(?string $imgPath): static
     {
         $this->imgPath = $imgPath;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PrivateGroup>
+     */
+    public function getPrivateGroups(): Collection
+    {
+        return $this->privateGroups;
+    }
+
+    public function addPrivateGroup(PrivateGroup $privateGroup): static
+    {
+        if (!$this->privateGroups->contains($privateGroup)) {
+            $this->privateGroups->add($privateGroup);
+            $privateGroup->addWhiteListedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrivateGroup(PrivateGroup $privateGroup): static
+    {
+        if ($this->privateGroups->removeElement($privateGroup)) {
+            $privateGroup->removeWhiteListedUser($this);
+        }
 
         return $this;
     }

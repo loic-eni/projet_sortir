@@ -2,8 +2,11 @@
 
 namespace App\Service;
 
+use App\Entity\Outing;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserService
 {

@@ -22,7 +22,8 @@ class OutingRepository extends ServiceEntityRepository
             ->createQueryBuilder('o')
             ->setMaxResults($limit|10)
             ->join('o.location', 'l')
-            ->where('l.deletedAt IS NULL');
+            ->where('l.deletedAt IS NULL')
+            ->orderBy('o.startDate', 'DESC');
 
         if($filter->getCampus() !== null)
             $query
@@ -81,7 +82,8 @@ class OutingRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('o')
             ->join('o.location', 'l')
-            ->where('l.deletedAt IS NULL');
+            ->where('l.deletedAt IS NULL')
+            ->orderBy('o.startDate', 'DESC');
         return $query->getQuery()->getResult();
     }
 

@@ -5,9 +5,13 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\Location;
 use App\Entity\Outing;
+use App\Entity\PrivateGroup;
+use Doctrine\ORM\EntityRepository;
 use App\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +24,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class OutingType extends AbstractType
 {
+    public function __construct(private readonly Security $security){}
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -127,6 +132,21 @@ class OutingType extends AbstractType
                 'label' => 'Campus: ',
                 'required' => true,
                 'attr' => ['class' => 'formField'],
+            ])
+            ->add('private', CheckboxType::class, [
+                    'label'=>'Sortie privée',
+                    'attr'=>
+                        ['class'=>'checkbox checkbox-primary']
+                ])
+            ->add('privateGroup', EntityType::class, [
+                'class' => PrivateGroup::class,
+                'query_builder'=> function(EntityRepository $er) {
+                    $er->createQueryBuilder('pg')->where('pg.owner = :owner')->setParameter('owner', $this->security->getUser());
+                },
+                'choice_label' => 'name',
+                'label' => 'Groupe: ',
+                'required' => false,
+                'attr' => ['class' => 'select select-bordered select-sm max-w-[120px]'],
             ])
         ;
     }

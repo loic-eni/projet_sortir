@@ -57,6 +57,12 @@ class Outing
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reason = null;
 
+    #[ORM\Column]
+    private ?bool $private = null;
+
+    #[ORM\ManyToOne(inversedBy: 'outings')]
+    private ?PrivateGroup $privateGroup = null;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -222,6 +228,30 @@ class Outing
     public function setReason(?string $reason): static
     {
         $this->reason = $reason;
+
+        return $this;
+    }
+
+    public function isPrivate(): ?bool
+    {
+        return $this->private;
+    }
+
+    public function setPrivate(bool $private): static
+    {
+        $this->private = $private;
+
+        return $this;
+    }
+
+    public function getPrivateGroup(): ?PrivateGroup
+    {
+        return $this->privateGroup;
+    }
+
+    public function setPrivateGroup(?PrivateGroup $privateGroup): static
+    {
+        $this->privateGroup = $privateGroup;
 
         return $this;
     }

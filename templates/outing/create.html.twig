@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Préparer une sortie{% endblock %}
+
+{% block body %}
+    {{ include('outing/_form.html.twig', {'button_label': 'Créer la sortie'}) }}
+{% endblock %}
