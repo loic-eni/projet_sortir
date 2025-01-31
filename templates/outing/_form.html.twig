@@ -1,7 +1,7 @@
 {% block body %}
-    <section class="container px-4 py-6">
+    <section class="container px-4 py-2">
         {{ form_start(outingForm, {'attr': {'novalidate': 'novalidate'}}) }}
-        <h3 class="font-semibold text-2xl text-gray-800 text-center my-10">Préparer une sortie</h3>
+        <h3 class="font-semibold text-2xl text-gray-800 text-center mb-10">{{ form_label|default('Préparer une sortie') }}</h3>
 
         <div class="flex flex-col lg:flex-row lg:justify-between w-full gap-6">
             <!-- Left side (form inputs) -->
@@ -68,6 +68,8 @@
                         const privateGroupContainer = document.getElementById('private-group-container');
 
                         if (!privateGroupSelect || !privateGroupContainer) return;
+
+                        if(privateGroupSelect.checked) privateGroupContainer.classList.remove('hidden');
 
                         privateGroupSelect.addEventListener('change', ({target: {checked}}) => privateGroupContainer.classList[checked ? 'remove' : 'add']('hidden'))
                     }
